@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Form, Input, Button, Checkbox, Divider, Row, Col } from 'antd';
 import axios from 'axios';
 import './log-in.component.css';
+import { environment } from '../environment/environment'
 
 export interface LogIns {
 
@@ -23,32 +24,21 @@ const onFinish = (values: any) => {
 
     console.log(postLogin);
 
-    // axios.post(`http://d7c0d8bfc87a.ngrok.io/login`, { postLogin })
-    //   .then(res => {
-    //     console.log(res);
-    //     console.log(res.data);
-    //   })
+    axios({
+      method: 'post',
+      url: `${environment.url}/login`,
+      data: postLogin,
+      headers: {'Content-Type': 'application/json' }
+      })
+      .then(res => {
+        console.log(res)
+      })
 
-    
-  //   axios.get(myurl, {
-  //     headers: { 'Access-Control-Allow-Origin': '*'
-//  },
-  // }).then(res => { 
-  //     console.log(res);
-
-  // }).catch(error => {
-  //     console.log('erro', error);
-  // })
-
-    
-
-    axios.get(`http://a095d08823fe.ngrok.io/topic`, {
-          headers: { 'Access-Control-Allow-Origin': '*'}
-     })
-    .then(res => {
-      console.log(res.data);
-    })
-    .catch(error => console.log(error));
+    // axios.get(`http://cf6ee9b1d3b0.ngrok.io/topic`)
+    // .then(res => {
+    //   console.log(res.data);
+    // })
+    // .catch(error => console.log(error));
 
       
 };
