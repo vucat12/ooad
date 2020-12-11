@@ -31,16 +31,10 @@ const onFinish = (values: any) => {
       headers: {'Content-Type': 'application/json' }
       })
       .then(res => {
-        console.log(res)
-      })
+        console.log(res.data)
+        window.localStorage.setItem("KeyToken", res.data.accessToken);
+      }) 
 
-    // axios.get(`http://cf6ee9b1d3b0.ngrok.io/topic`)
-    // .then(res => {
-    //   console.log(res.data);
-    // })
-    // .catch(error => console.log(error));
-
-      
 };
   
 const onFinishFailed = (errorInfo: any) => {

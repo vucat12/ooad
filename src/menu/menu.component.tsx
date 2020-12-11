@@ -1,10 +1,12 @@
 import React from 'react';
 import { DesktopOutlined, FileOutlined, PieChartOutlined, TeamOutlined } from '@ant-design/icons';
 import './menu.component.css';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import HeaderInit from '../shared/header/header.component';
 import axios from 'axios';
+import { environment } from '../environment/environment';
+import Topic from '../topic/topic.component';
 
 export interface SlideBars {}
 
@@ -12,7 +14,16 @@ const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
 export class SlideBar extends React.Component<SlideBars> {
-
+  
+  valueApi:number;
+  isLoading: boolean;
+  data = {};
+  constructor(props: any) {
+    super(props);
+    this.valueApi = 0;
+    this.isLoading = false;
+  }
+  
   state = {
     collapsed: false,
   };
@@ -21,17 +32,28 @@ export class SlideBar extends React.Component<SlideBars> {
     this.setState({ collapsed });
   };
 
+
+  getTopics(){
+  //   this.isLoading = true;
+  //   axios.get(`${environment.url}/topic`,
+  //   {
+  //    headers: {
+  //      Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+  //   } 
+  //  })
+  //    .then(res => {
+  //      this.data = res.data;
+  //      console.log(this.data)
+  //    })
+  //    .catch(e => console.log(e))
+  //    this.isLoading = false;
+  }
+
+
   getItems(item: any){
-      if (item.key) {
-        axios.get('http://4e0b6502f6fb.ngrok.io/topic', {
-          headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2dWtoYW5oIiwiZXhwIjoxNjA3NDY0ODM4LCJpYXQiOjE2MDc0NDY4Mzh9.H9BQIkMnkl64YP25-gSCPnNBrLkBGbhFwRXS4gPyKIZG9ts6fmfyUA3CP2-0Y95hNLOk-ckedCG_toQszEfqpQ'
-         } 
-        })
-          .then(res => {
-            console.log(res.data)
-          })
-          .catch(e => console.log(e))
+    this.valueApi = item.key;
+      if (this.valueApi == 1) {
+        this.getTopics();
       }
   }
 
@@ -44,7 +66,7 @@ export class SlideBar extends React.Component<SlideBars> {
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline"   onClick={(item) => this.getItems(item)} >
             <Menu.Item key="1" icon={<PieChartOutlined/>} >
-              Option 1
+              Topic
             </Menu.Item>
             <Menu.Item key="2" icon={<DesktopOutlined />}>
               Option 2
@@ -71,13 +93,9 @@ export class SlideBar extends React.Component<SlideBars> {
           </Header>
           <Content style={{ margin: '0 16px' }}>
 
-            <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
-              <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
-            </Breadcrumb>
-            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              Bill is a cat.
-            </div>
-            
+          
+            <Topic/>
+
           </Content>
         </Layout>
       </Layout>
