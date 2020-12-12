@@ -30,15 +30,11 @@ export class HomePage extends React.Component<HomeContent> {
         </Col>
         <Col span={11} >
           <div  style={{float: 'right'}}>
-            <div style={{display: "inline-block"}}>
-              <Link to='/login'>
-                <UserOutlined style={{paddingRight: '10px'}} />
-                <span>Dang nhap</span>
-              </Link>
-            </div>
             <div style={{display: "inline-block", padding: ' 0px 15px'}}>
               <UserAddOutlined  style={{paddingRight: '10px'}} />
-              <span>Dang ky</span>
+              <Link to="/login">
+                <span>Log out</span>
+              </Link>
             </div>
           </div>
         </Col>

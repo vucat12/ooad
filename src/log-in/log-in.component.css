@@ -6,8 +6,10 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-color: grey;
-   
+    overflow: hidden;
 }
+
+
 
 .bg-inside {
     background-image: url('../assets/background.jpg');

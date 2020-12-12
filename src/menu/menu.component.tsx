@@ -7,6 +7,8 @@ import HeaderInit from '../shared/header/header.component';
 import axios from 'axios';
 import { environment } from '../environment/environment';
 import Topic from '../topic/topic.component';
+import { Link, Route, Switch } from 'react-router-dom';
+import HomeOverview from '../home-page/home-page.component';
 
 export interface SlideBars {}
 
@@ -66,10 +68,14 @@ export class SlideBar extends React.Component<SlideBars> {
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline"   onClick={(item) => this.getItems(item)} >
             <Menu.Item key="1" icon={<PieChartOutlined/>} >
-              Topic
+              <Link to="/home-overview">
+                Home
+              </Link>
             </Menu.Item>
             <Menu.Item key="2" icon={<DesktopOutlined />}>
-              Option 2
+              <Link to="/topic">
+                Topic
+              </Link>
             </Menu.Item>
             <SubMenu key="sub1" icon={<UserOutlined />} title="User">
               <Menu.Item key="3">Tom</Menu.Item>
@@ -93,8 +99,10 @@ export class SlideBar extends React.Component<SlideBars> {
           </Header>
           <Content style={{ margin: '0 16px' }}>
 
-          
-            <Topic/>
+          <Switch>
+             <Route path="/topic" component={Topic}></Route>        
+             <Route path="/home-overview" component={HomeOverview} ></Route>
+          </Switch>
 
           </Content>
         </Layout>

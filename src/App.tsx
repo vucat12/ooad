@@ -8,9 +8,9 @@ function App() {
     <div>
       <BrowserRouter>
         <div>
-          <Route path="/" exact component={SlideBar} />
           <Route path="/login" exact component={LogIn} />
         </div> 
+        <Route path="*" exact component={SlideBar} />
       </BrowserRouter>
     </div>
   );

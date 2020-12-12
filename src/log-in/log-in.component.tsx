@@ -4,6 +4,8 @@ import { Form, Input, Button, Checkbox, Divider, Row, Col } from 'antd';
 import axios from 'axios';
 import './log-in.component.css';
 import { environment } from '../environment/environment'
+import { Link, Route, Switch } from 'react-router-dom';
+import SlideBar from '../menu/menu.component';
 
 export interface LogIns {
 
@@ -31,8 +33,14 @@ const onFinish = (values: any) => {
       headers: {'Content-Type': 'application/json' }
       })
       .then(res => {
-        console.log(res.data)
-        window.localStorage.setItem("KeyToken", res.data.accessToken);
+        console.log(res)
+        if (res.statusText === "OK") {
+          window.localStorage.setItem("KeyToken", res.data.accessToken);
+          window.open("/")
+        }
+        else {
+          alert("Hello! I am an alert box!");
+        }
       }) 
 
 };
@@ -107,7 +115,7 @@ export class LogIn extends React.Component<LogIns> {
 
             <Form.Item {...tailLayout}>
               <Button type="primary" htmlType="submit" >
-                Submit
+                  Submit
               </Button>
             </Form.Item>
           </Form>
