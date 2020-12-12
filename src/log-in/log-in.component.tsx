@@ -34,7 +34,7 @@ const onFinish = (values: any) => {
       })
       .then(res => {
         console.log(res)
-        if (res.statusText === "OK") {
+        if (res.status === 200) {
           window.localStorage.setItem("KeyToken", res.data.accessToken);
           window.open("/")
         }

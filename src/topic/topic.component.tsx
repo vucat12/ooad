@@ -3,87 +3,85 @@ import { Breadcrumb, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
+import { TOPIC } from "../types/components/Topic/index";
 
-export class Topic extends React.Component {
-  dataSource : any;
+interface MyState {
+  data: TOPIC[]
+}
+interface IProps {
+
+}
+export default class Topic extends React.Component<IProps, MyState> {
+  constructor(props: IProps) {
+    super(props)
+    this.state = {
+      data: []
+    };
+  }
+  componentDidMount() {
+    axios.get(`${environment.url}/topic`,
+      {
+        headers: {
+          Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        }
+      })
+      .then(res => {
+        const dataSource: TOPIC[] = res.data.contents;
+        dataSource.map((ele: TOPIC) => {
+          ele.nameFaculty = ele.faculty.nameFaculty;
+          ele.nameLevel = ele.level.nameLevel;
+          ele.fieldName = ele.fieldTopic.fieldName
+        }
+        );
+        this.setState({ ...this.state, data: dataSource })
+        return this.dataSource;
+      })
+      .catch(e => console.log(e))
+  }
+  dataSource: any;
   columns: any = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id"
+    },
     {
       title: "Name",
       dataIndex: "nameTopic",
-      key: "name"
+      key: "nameTopic"
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age"
+      title: "Faculty",
+      dataIndex: "nameFaculty",
+      key: "nameFaculty"
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address"
+      title: "Level",
+      dataIndex: "nameLevel",
+      key: "nameLevel"
     },
     {
-      title: "Tags",
-      key: "tags",
-      dataIndex: "tags"
+      title: "Field",
+      key: "fieldName",
+      dataIndex: "fieldName"
     },
     {
-      title: "Action",
-      key: "action"
+      title: "Last Updated",
+      key: "updatedAt",
+      dataIndex: "updatedAt"
     }
   ];
-
-  // data: any = (async () => {
-  //   await axios.get(`${environment.url}/topic`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
-  //         }
-  //       })
-  //       .then(res => {
-  //         this.dataSource = res.data.contents;
-  //         console.log(this.dataSource)
-  //         return this.dataSource;
-  //       })
-  //       .catch(e => console.log(e))
-  //   });
-
-  data: any = [
-    {
-      key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"]
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"]
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park",
-      tags: ["cool", "teacher"]
-    }
-  ];
-
   render() {
+    console.log(this.state.data);
     return (
       <div>
         <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
           <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-          <Table columns={this.columns} dataSource={this.data}/>
+          <Table columns={this.columns} dataSource={this.state.data} />
         </div>
       </div>
     )
   }
 }
-
-export default Topic;
