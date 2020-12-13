@@ -11,15 +11,15 @@ export type TOPIC = {
   }
   
 export type FACULTY = {
-    id: string,
+    facultyId: string,
     nameFaculty: string,
     nameUniversity: string
 }
 export type LEVEL = {
-    id: string,
+    levelId: string,
     nameLevel: string
 }
 export type FIELD = {
-    id: string,
+    fieldId: string,
     fieldName: string
 }

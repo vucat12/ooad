@@ -32,7 +32,7 @@ export class HomePage extends React.Component<HomeContent> {
           <div  style={{float: 'right'}}>
             <div style={{display: "inline-block", padding: ' 0px 15px'}}>
               <UserAddOutlined  style={{paddingRight: '10px'}} />
-              <Link to="/login">
+              <Link to="/">
                 <span>Log out</span>
               </Link>
             </div>

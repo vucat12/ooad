@@ -33,17 +33,16 @@ const onFinish = (values: any) => {
       headers: {'Content-Type': 'application/json' }
       })
       .then(res => {
-        console.log(res)
         if (res.status === 200) {
           window.localStorage.setItem("KeyToken", res.data.accessToken);
-          window.open("/")
+          window.location.href="/home-overview"
         }
-        else {
-          alert("Hello! I am an alert box!");
-        }
+     
       }) 
-
+      .catch(error => alert("Wrong") )
 };
+
+
   
 const onFinishFailed = (errorInfo: any) => {
 console.log('Failed:', errorInfo);
