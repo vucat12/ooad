@@ -1,5 +1,5 @@
 
-import { Breadcrumb, Button, Dropdown, Input, Menu, Popover, Select, Table } from 'antd';
+import { Breadcrumb, Button, Dropdown, Input, Menu, Popover, Select, Space, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -62,7 +62,7 @@ export default class Topic extends React.Component<IProps, MyState> {
   facultyList: any;
   levelList: any;
   fieldList: any;
-
+  clear: any;
 
   getListFaculty = () => {
     axios.get(`${environment.url}/faculty/all`,
@@ -122,13 +122,19 @@ export default class Topic extends React.Component<IProps, MyState> {
         return this.dataSource;
       })
       .catch(e => console.log(e))
-
-
-
-      console.log(this.state.data)
+      this.filter.page=1;
   }
 
-  
+  clearData = () => {
+    this.filter = {
+      search: '',
+      facultyId: undefined,
+      levelId: undefined,
+      fieldId: undefined,
+      page: 1,
+    }
+    this.getTopic();
+  }
 
   getListLevel = () => {
     axios.get(`${environment.url}/level/all`,
@@ -149,7 +155,6 @@ export default class Topic extends React.Component<IProps, MyState> {
 
   handleChange = (e: any) => {
     this.filter.search = e.target.value;
-    console.log('ccccc', this.state.faculty)
   }
 
   getValueFaculty = (e: any) => {
@@ -201,7 +206,16 @@ export default class Topic extends React.Component<IProps, MyState> {
       title: "Last Updated",
       key: "updatedAt",
       dataIndex: "updatedAt"
-    }
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: () => (
+        <Space size="middle">
+          <Button>Register</Button>
+        </Space>
+      ),
+    },
   ];
 
 
@@ -211,7 +225,6 @@ export default class Topic extends React.Component<IProps, MyState> {
         <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
           <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
           <div style={{ display: 'inline-block', float: 'right' }}>
-            <Button >Add</Button>
             <Popover content={<div>
       <div>
         <span style={{display: 'inline-block', width: '25%'}}>Keyword </span>
@@ -220,6 +233,7 @@ export default class Topic extends React.Component<IProps, MyState> {
       <div style={{marginTop: '5%'}}>
       <span style={{width: '25%', display: 'inline-block'}}>Faculty</span>
         <Select
+              allowClear
               style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
               onChange={this.getValueFaculty}
             >
@@ -238,6 +252,7 @@ export default class Topic extends React.Component<IProps, MyState> {
       <div style={{marginTop: '5%'}}>
       <span style={{width: '25%', display: 'inline-block'}}>Level</span>
         <Select
+              allowClear
               style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
               onChange={this.getValueLevel}
             >
@@ -257,6 +272,7 @@ export default class Topic extends React.Component<IProps, MyState> {
       <div style={{marginTop: '5%'}}>
       <span style={{width: '25%', display: 'inline-block'}}>Field</span>
         <Select
+               allowClear
               style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
               onChange={this.getValueFiled}
             >

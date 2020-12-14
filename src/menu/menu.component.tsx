@@ -55,6 +55,7 @@ export class SlideBar extends React.Component<SlideBars> {
   getItems(item: any){
     this.valueApi = item.key;
       if (this.valueApi == 1) {
+        console.log(item.key)
         this.getTopics();
       }
   }
@@ -66,7 +67,7 @@ export class SlideBar extends React.Component<SlideBars> {
     <Layout style={{ minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
           <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline"   onClick={(item) => this.getItems(item)} >
+          <Menu theme="dark" mode="inline"   onClick={(item) => this.getItems(item)} >
             <Menu.Item key="1" icon={<PieChartOutlined/>} >
               <Link to="/home-overview">
                 Home
@@ -100,8 +101,8 @@ export class SlideBar extends React.Component<SlideBars> {
           <Content style={{ margin: '0 16px' }}>
 
           <Switch>
+             <Route path="/home-overview" component={HomeOverview}></Route>
              <Route path="/topic" component={Topic}></Route>        
-             <Route path="/home-overview" component={HomeOverview} ></Route>
           </Switch>
 
           </Content>
