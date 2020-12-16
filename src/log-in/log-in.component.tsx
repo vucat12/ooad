@@ -4,8 +4,6 @@ import { Form, Input, Button, Checkbox, Divider, Row, Col } from 'antd';
 import axios from 'axios';
 import './log-in.component.css';
 import { environment } from '../environment/environment'
-import { Link, Route, Switch } from 'react-router-dom';
-import SlideBar from '../menu/menu.component';
 
 export interface LogIns {
 

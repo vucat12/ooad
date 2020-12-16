@@ -4,11 +4,10 @@ import './menu.component.css';
 import { Layout, Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import HeaderInit from '../shared/header/header.component';
-import axios from 'axios';
-import { environment } from '../environment/environment';
 import Topic from '../topic/topic.component';
 import { Link, Route, Switch } from 'react-router-dom';
 import HomeOverview from '../home-page/home-page.component';
+import ListTopic from '../list-topic/list-topic.component';
 
 export interface SlideBars {}
 
@@ -35,28 +34,10 @@ export class SlideBar extends React.Component<SlideBars> {
   };
 
 
-  getTopics(){
-  //   this.isLoading = true;
-  //   axios.get(`${environment.url}/topic`,
-  //   {
-  //    headers: {
-  //      Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
-  //   } 
-  //  })
-  //    .then(res => {
-  //      this.data = res.data;
-  //      console.log(this.data)
-  //    })
-  //    .catch(e => console.log(e))
-  //    this.isLoading = false;
-  }
-
-
   getItems(item: any){
     this.valueApi = item.key;
       if (this.valueApi == 1) {
         console.log(item.key)
-        this.getTopics();
       }
   }
 
@@ -78,8 +59,12 @@ export class SlideBar extends React.Component<SlideBars> {
                 Topic
               </Link>
             </Menu.Item>
-            <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-              <Menu.Item key="3">Tom</Menu.Item>
+            <SubMenu key="sub1" icon={<UserOutlined />} title="Faculty">
+              <Menu.Item key="3">
+                <Link to="/list-topic">
+                  List Topic
+                </Link>
+              </Menu.Item>
               <Menu.Item key="4">Bill</Menu.Item>
               <Menu.Item key="5">Alex</Menu.Item>
             </SubMenu>
@@ -102,7 +87,8 @@ export class SlideBar extends React.Component<SlideBars> {
 
           <Switch>
              <Route path="/home-overview" component={HomeOverview}></Route>
-             <Route path="/topic" component={Topic}></Route>        
+             <Route path="/topic" component={Topic}></Route>     
+             <Route path="/list-topic" component={ListTopic}></Route>   
           </Switch>
 
           </Content>
