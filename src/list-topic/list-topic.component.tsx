@@ -43,6 +43,18 @@ export default class ListTopic extends React.Component<IProps, MyState> {
     this.getListField();
   }
   dataSource: any;
+
+  topicDetail = {
+    nameTopic: '',
+    facultyId: 0,
+    nameFaculty: '',
+    levelId: 0,
+    nameLevel: '',
+    fieldId: 0,
+    fieldName: '',
+    description: '',
+  }
+
   filter = {
     search: '',
     facultyId: undefined,
@@ -122,25 +134,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       // this.filter.page=1;
   }
 
-  clearData = () => {
-    this.filter = {
-      search: '',
-      facultyId: undefined,
-      levelId: undefined,
-      fieldId: undefined,
-      page: 1,
-    }
-    this.getTopic();
-  }
-
   searchData = () => {
-    this.filter = {
-      search: '',
-      facultyId: undefined,
-      levelId: undefined,
-      fieldId: undefined,
-      page: 1,
-    }
     this.getTopic();
   }
 
@@ -162,6 +156,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   }
 
   handleChange = (e: any) => {
+    console.log("aaaaa")
     this.filter.search = e.target.value;
   }
 
@@ -188,8 +183,28 @@ export default class ListTopic extends React.Component<IProps, MyState> {
     this.setState({ visible: true });
   }
   
-  showModalEdit = (topicId :any) => {
+  showModalEdit = (topicId :any, record: any) => {
     console.log("id", topicId)
+
+    this.topicDetail.nameTopic = record.nameTopic;
+    this.topicDetail.facultyId = record.faculty.facultyId;
+    this.topicDetail.nameFaculty = record.faculty.nameFaculty
+    this.topicDetail.levelId = record.level.levelId;
+    this.topicDetail.nameLevel = record.level.nameLevel;
+    this.topicDetail.fieldId = record.fieldTopic.fieldId;
+    this.topicDetail.fieldName = record.fieldTopic.fieldName;
+    this.topicDetail.description = record.description;
+
+    console.log(this.topicDetail)
+    // nameTopic: '',
+    // facultyId: 0,
+    // nameFaculty: '',
+    // levelId: 0,
+    // nameLevel: '',
+    // fieldId: 0,
+    // fieldName: '',
+    // description: '',
+
     this.setState({ visible: true, id: topicId })
   }
 
@@ -262,7 +277,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       render: (text: any, record: any) =>
           this.state.data.length >= 1 ? (
             <div style={{ display: 'inline-block', float: 'right' }}>
-                <Button onClick={() => this.showModalEdit(record.topicId)}>Edit</Button>
+                <Button onClick={() => this.showModalEdit(record.topicId, record)}>Edit</Button>
                 <Popconfirm style={{display: 'inline-block'}} title="Sure to delete?" onConfirm={() => this.handleDelete(record.topicId)}>
                   <Button>Delete</Button> 
                </Popconfirm>
@@ -283,7 +298,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
                     title="Add Topic"
                     footer={null}
                     > 
-                        <ListTopicEdit id={this.state.id}/>
+                        <ListTopicEdit id={this.state.id} topicDetail={this.topicDetail}/>
                     </Modal>
             <Popover content={<div>
         <div>

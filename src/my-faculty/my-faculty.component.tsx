@@ -1,5 +1,5 @@
 
-import { Breadcrumb, Button, Dropdown, Input, Menu, Popover, Select, Space, Table } from 'antd';
+import { Breadcrumb, Button, Descriptions, Dropdown, Input, Menu, Popover, Select, Space, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -54,6 +54,12 @@ export default class MyFaculty extends React.Component<IProps, MyState> {
   fieldList: any;
   contractList: any;
   clear: any;
+  info = {
+    nameFaculty: '',
+    nameUniversity: '',
+    totalTopic: 0,
+    totalLecturer: 0
+  };
   getListField = () => {
     axios.get(`${environment.url}/field/all`,
       {
@@ -98,13 +104,19 @@ export default class MyFaculty extends React.Component<IProps, MyState> {
       })
       .then(res => {
         console.log(res.data)
+        this.info = res.data.info;
+        this.info = {
+          nameFaculty: res.data.info.nameFaculty,
+          nameUniversity: res.data.info.nameUniversity,
+          totalTopic: res.data.info.totalTopic,
+          totalLecturer: res.data.info.totalLecturer,
+        }
+        console.log(this.info)
         this.pagination.page = res.data.lecturers.page;
         this.pagination.totalItem = res.data.lecturers.totalItem;
         this.pagination.amount = res.data.lecturers.amount;
-        console.log(this.pagination)
         const dataSource: LECTURES[] = res.data.lecturers.contents;
         this.setState({ ...this.state, data: dataSource })
-        console.log(this.state.data, "==============", dataSource)
         return this.dataSource;
       })
       .catch(e => console.log(e))
@@ -208,9 +220,20 @@ export default class MyFaculty extends React.Component<IProps, MyState> {
   render() {
     return (
       <div>
-        <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
-          <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
-          <div style={{ display: 'inline-block', float: 'right' }}>
+        <div style={{background: 'white',
+                     margin: '4% 1.5%',
+                     padding: '2%',
+                      }}>
+          <Descriptions title="Detail Faculty">
+            <Descriptions.Item label={<label style={{ fontWeight: 'bold' }}>Name of Faculty</label>}>{this.info.nameFaculty}</Descriptions.Item>
+            <Descriptions.Item label={<label style={{ fontWeight: 'bold' }}>Name of University</label>}>{this.info.nameUniversity}</Descriptions.Item>
+          <br/>
+            <Descriptions.Item label={<label style={{ fontWeight: 'bold' }}>Total Topic</label>}>{this.info.totalTopic}</Descriptions.Item>
+            <Descriptions.Item label={<label style={{ fontWeight: 'bold' }}>Total Lecturer</label>}>{this.info.totalLecturer}</Descriptions.Item>
+          </Descriptions>
+        </div>
+        <div>
+          <div style={{ float: 'right', margin: '10px 40px 30px 0' }}>
             <Popover content={<div>
       <div>
         <span style={{display: 'inline-block', width: '25%'}}>Keyword </span>
@@ -281,7 +304,7 @@ export default class MyFaculty extends React.Component<IProps, MyState> {
               <Button>Search</Button>
             </Popover>
           </div>
-        </Breadcrumb>
+        </div>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table 
           columns={this.columns} 

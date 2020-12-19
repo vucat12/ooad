@@ -9,10 +9,10 @@ export interface MyState {
     faculty: FACULTY[];
     level: LEVEL[];
     filed: FIELD[];
-    topicDetail: TOPIC[];
 }
 interface IProps {
   id?: any,
+  topicDetail?: any;
 }
 export class ListTopicEdit extends React.Component<IProps, MyState> {
     constructor(props: Readonly<IProps>) {
@@ -21,37 +21,46 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
           faculty: [],
           level: [],
           filed: [],
-          topicDetail: [],
         };
-        this.getTopicId(this.props.id)
+        // this.getTopicId(this.props.id)
+        console.log("====id=======", this.props.id)
+        console.log("======topicDetail======", this.props.topicDetail)
       }
     facultyList: any;
+
       componentDidMount() {
         this.getListFaculty()
         this.getListLevel();
         this.getListField();
         if (this.props.id !== undefined) {
-          this.getTopicId(this.props.id)
+          // this.getTopicId(this.props.id)
         }
       }
-    getTopicId(id: any) {
-        axios.get(`${environment.url}/topic/${id}`,
-        {
-        headers: {
-            Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
-        }
-        })
-        .then(res => {
-          const topic: TOPIC[] = res.data.data;
-          this.setState({
-            ...this.state, 
-            topicDetail: topic,
-          })
-        })
-        .catch((error) => {
-        console.error(error);
-        });
-    }
+    // getTopicId(id: any) {
+    //     axios.get(`${environment.url}/topic/${id}`,
+    //     {
+    //     headers: {
+    //         Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+    //     }
+    //     })
+    //     .then(res => {
+    //       console.log("---------", res.data.data)
+
+    //       this.topicDetail = {
+    //         nameTopic: res.data.data.nameTopic,
+    //         facultyId: res.data.data.faculty.facultyId,
+    //         nameFaculty: res.data.data.faculty.nameFaculty,
+    //         levelId: res.data.data.level.levelId,
+    //         nameLevel: res.data.data.level.nameLevel,
+    //         fieldId: res.data.data.fieldTopic.fieldId,
+    //         fieldName: res.data.data.fieldTopic.fieldName,
+    //         description: res.data.data.fieldTopic.description,
+    //       }
+    //     })
+    //     .catch((error) => {
+    //     console.error(error);
+    //     });
+    // }
   
     getListFaculty = () => {
         axios.get(`${environment.url}/faculty/all`,
@@ -118,7 +127,25 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
                 }
             }) 
             .catch(error => alert("Wrong") )
-      }
+    }
+   
+    editTopic = (value: any) => {
+      axios({
+          method: 'put',
+          url: `${environment.url}/topic`,
+          data: value, 
+          headers: {
+              Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+            }
+          })
+          .then(res => {
+              if (res.status === 200) {
+                  alert("Ok")
+                  window.location.href="/list-topic"
+              }
+          }) 
+          .catch(error => alert("Wrong") )
+  }
 
     onReset = () => {
       window.location.href= "/list-topic"
@@ -135,8 +162,18 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
         console.log("aaaaa")
     }
     onFinish = (values: any) => {
-      console.log("values", values)
-        this.createTopic(values);
+      const topicId = this.props.id;
+      const editValue = {
+        topicId,
+        ...values,
+      }
+
+        if (this.props.id != undefined) {
+          this.editTopic(editValue)
+        }
+        else {
+          this.createTopic(values);
+        }
     };
   
   render() {
@@ -150,14 +187,24 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
           range: '${label} must be between ${min} and ${max}',
         },
       };
+    const detail = {
+
+    }
     return (
     <div>
         <Form
         onFinish={this.onFinish} 
         validateMessages={validateMessages}
+        initialValues={{
+          ['nameTopic']: this.props.topicDetail.nameTopic,
+          ['facultyId']: this.props.topicDetail.facultyId,
+          ['levelId']: this.props.topicDetail.levelId,
+          ['fieldId']: this.props.topicDetail.fieldId,
+          ['description']: this.props.topicDetail.description,
+        }}
         >
       <Form.Item name={['nameTopic']} label="Title" rules={[{ required: true }]}>
-        <Input value="aaaa" style={{float: 'right', width: '370px'}} /> 
+        <Input style={{float: 'right', width: '370px'}} /> 
       </Form.Item>
       <Form.Item name={['facultyId']} label="Faculty" rules={[{ required: true }]}>
       <Select
@@ -214,17 +261,17 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
                 : null}
             </Select>
       </Form.Item>
-      <Form.Item name={['year']} label="Age"
+      {/* <Form.Item name={['year']} label="Year"
        rules={[
         {
           type: 'number',
-          min: 1900,
-          max: 2000,
+          min: 2015,
+          max: 2020,
           required: true
         },
       ]}>
         <InputNumber style={{float: 'right', width: '370px'}} />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item name={['description']} label="Description"  rules={[{ required: true }]}>
         <Input.TextArea  style={{float: 'right', width: '370px'}}/>
       </Form.Item>
@@ -232,7 +279,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
         <Button type="primary" htmlType="submit" >
           Submit
         </Button>
-        <Button type="primary" onClick={this.onReset} >
+        <Button  type="dashed" onClick={this.onReset} >
           Cancel
         </Button>
       </Form.Item>
