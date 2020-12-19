@@ -1,9 +1,9 @@
 
-import { Breadcrumb, Button, Dropdown, Input, Menu, Popover, Select, Space, Table } from 'antd';
+import { Breadcrumb, Button, Dropdown, Form, Input, Menu, Modal, Popover, Select, Space, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
-import { FACULTY, TOPIC, LEVEL, FIELD } from "../types/components/Topic/index";
+import { FACULTY, TOPIC, LEVEL, FIELD, NameLecturer } from "../types/components/Topic/index";
 import { getFaculty } from '../types/components/Topic/topic.component.services'
 import { DownOutlined } from '@ant-design/icons';
 import './topic.component.css'
@@ -13,6 +13,8 @@ interface MyState {
   faculty: FACULTY[];
   level: LEVEL[];
   filed: FIELD[];
+  visible: boolean;
+  userDetail: NameLecturer[];
 }
 interface IProps {
 }
@@ -24,27 +26,17 @@ export default class Topic extends React.Component<IProps, MyState> {
       faculty: [],
       level: [],
       filed: [],
+      visible: false,
+      userDetail: []
     };
-
   }
-  
-  // facultyList: any = [{
-  //   facutyId: 0,
-  //   nameFaculty: 'Cong nghe thong tin'
-  // },{
-  //   facutyId: 1,
-  //   nameFaculty: 'Cong nghe thong tin 1'
-  // },{
-  //   facutyId: 2,
-  //   nameFaculty: 'Cong nghe thong tin 2'
-  // }];
-
 
   componentDidMount() {
     this.getTopic();
     this.getListFaculty()
     this.getListLevel();
     this.getListField();
+    this.getListUser(undefined);
   }
   dataSource: any;
   filter = {
@@ -63,6 +55,8 @@ export default class Topic extends React.Component<IProps, MyState> {
   levelList: any;
   fieldList: any;
   clear: any;
+  userList: any;
+  topicId: any;
 
   getListFaculty = () => {
     axios.get(`${environment.url}/faculty/all`,
@@ -176,6 +170,75 @@ export default class Topic extends React.Component<IProps, MyState> {
     this.getTopic();
   }
 
+  showModal = (value: any) => {
+    this.topicId = value.topicId;
+    console.log(this.topicId)
+    this.setState({ visible: true });
+  }
+
+  onCancel = () => {
+    this.setState({ visible: false })
+  }
+
+  onFinish = (values: any) => {
+    this.setState({ visible: false })
+
+    const fullMember = [{
+      "username": values.mainMember,
+      "position": values.mainPosition,
+      "primary": true,
+    }, {
+      "username": values.extraMember1,
+      "position": values.extraPosition1,
+    }, {
+      "username": values.extraMember2,
+      "position": values.extraPosition2,
+    }, {
+      "username": values.extraMember3,
+      "position": values.extraPosition3,
+    }, {
+      "username": values.extraMember4,
+      "position": values.extraPosition4,
+    }]
+    this.createListUser(this.topicId, fullMember)
+    this.setState({ visible: false })
+  }
+
+  getListUser = (name: any) => {
+    axios.get(`${environment.url}/user`,
+    {
+      headers: {
+        Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+      }, 
+    })
+    .then(res => {
+      console.log(res)
+      const userDetail: NameLecturer[] = res.data;
+      this.setState({...this.state, userDetail: userDetail})
+      return this.userList;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+  createListUser = (id: any, listUser: any) => {
+    axios({
+      method: 'post',
+      url: `${environment.url}/topic/register/${id}`,
+      data: listUser, 
+      headers: {
+          Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        }
+      })
+      .then(res => {
+          if (res.status === 200) {
+              alert("Ok")
+          }
+      }) 
+      .catch(error => alert("Wrong") )
+  }
+
   columns: any = [
     {
       title: "ID",
@@ -210,14 +273,13 @@ export default class Topic extends React.Component<IProps, MyState> {
     {
       title: 'Action',
       key: 'action',
-      render: () => (
+      render: (text: any, record: any) => (
         <Space size="middle">
-          <Button>Register</Button>
+          <Button onClick={() => this.showModal(record)}>Register</Button>
         </Space>
       ),
     },
   ];
-
 
   render() {
     return (
@@ -311,6 +373,190 @@ export default class Topic extends React.Component<IProps, MyState> {
           onChange= {this.changePagination}
           />
         </div>
+        <Modal
+          visible={this.state.visible}
+          title="Register Topic"
+          footer={null}
+          width="36%"
+          onCancel={this.onCancel}
+          > 
+            <div>
+            <Form name="complex-form" onFinish={this.onFinish} >
+              <Form.Item
+               style={{margin: '0 2%'}}
+              >
+                <Form.Item
+                name="mainMember"
+                label="Main Member"
+                rules={[{ required: true }]}
+                style={{ display: 'inline-block', }}
+                >
+                <Select
+                allowClear
+                style={{width: '236px '}}
+                showSearch
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+              </Select>
+                </Form.Item>
+                <Form.Item
+                label="Position"
+                name="mainPosition"
+                rules={[{ required: true }]}
+                style={{ display: 'inline-block', marginLeft: '20px'}}
+                >
+                <Input style={{width: '130%'}}  />
+                </Form.Item>
+              </Form.Item>
+              <Form.Item style={{margin: '0 2%'}}>
+                <Form.Item
+                name="extraMember1"
+                label="Extra Member"
+                style={{ display: 'inline-block', }}
+                >
+                <Select
+                allowClear
+                style={{width: '236px '}}
+                showSearch
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+                </Select>
+
+                </Form.Item>
+                <Form.Item
+                label="Position"
+                name="extraPosition1"
+                style={{ display: 'inline-block', marginLeft: '20px'}}
+                >
+                <Input style={{width: '130%'}}  />
+                </Form.Item>
+              </Form.Item>
+              <Form.Item style={{margin: '0 2%'}}>
+                <Form.Item
+                name="extraMember2"
+                label="Extra Member"
+                style={{ display: 'inline-block', }}
+                >
+                  <Select
+                allowClear
+                style={{width: '236px '}}
+                showSearch
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+                </Select>
+                </Form.Item>
+                <Form.Item
+                label="Position"
+                name="extraPosition2"
+                style={{ display: 'inline-block', marginLeft: '20px'}}
+                >
+                <Input style={{width: '130%'}}  />
+                </Form.Item>
+              </Form.Item>
+              <Form.Item style={{margin: '0 2%'}}>
+                <Form.Item
+                name="extraMember3"
+                label="Extra Member"
+                style={{ display: 'inline-block', }}
+                >
+                 <Select
+                allowClear
+                style={{width: '236px '}}
+                showSearch
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+                </Select>
+                </Form.Item>
+                <Form.Item
+                label="Position"
+                name="extraPosition3"
+                style={{ display: 'inline-block', marginLeft: '20px'}}
+                >
+                <Input style={{width: '130%'}}  />
+                </Form.Item>
+              </Form.Item>
+              <Form.Item style={{margin: '0 2%'}}>
+                <Form.Item
+                name="extraMember4"
+                label="Extra Member"
+                style={{ display: 'inline-block', }}
+                >
+                  <Select
+                allowClear
+                style={{width: '236px '}}
+                showSearch
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+                </Select>
+                </Form.Item>
+                <Form.Item
+                label="Position"
+                name="extraPosition4"
+                style={{ display: 'inline-block', marginLeft: '20px'}}
+                >
+                <Input style={{width: '130%'}}  />
+                </Form.Item>
+              </Form.Item>
+              <Form.Item
+               colon={false}
+              >
+                <div style={{float: 'right', paddingRight: '1.5%'}}>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+                <Button type="ghost" onClick={this.onCancel}>
+                  Cancel
+                </Button>
+                </div>
+              </Form.Item>
+            </Form>
+            </div>
+          </Modal>
       </div>
     )
   }

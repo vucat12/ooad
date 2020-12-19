@@ -40,3 +40,17 @@ export type CONTRACT = {
     contractId: number,
     nameContract: string
 }
+
+export type NameLecturer = {
+    lecturerId: number,
+    username: string,
+}
+
+export type MYTOPIC = {
+    nameTopic: string,
+    description: string,
+    facultyName: string,
+    levelName: string,
+    fieldTopic: string,
+    status: string
+}

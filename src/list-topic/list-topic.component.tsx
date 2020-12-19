@@ -220,6 +220,10 @@ export default class ListTopic extends React.Component<IProps, MyState> {
     this.setState({ isShowEdit: false })
   }
 
+  onCancel = () => {
+    this.setState({ visible: false })
+  }
+
   handleDelete = (topicId: any) => {
     axios({
       method: 'delete',
@@ -296,6 +300,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
                     <Modal
                     visible={this.state.visible}
                     title="Add Topic"
+                    onCancel={this.onCancel}
                     footer={null}
                     > 
                         <ListTopicEdit id={this.state.id} topicDetail={this.topicDetail}/>

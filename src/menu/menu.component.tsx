@@ -11,6 +11,7 @@ import ListTopic from '../list-topic/list-topic.component';
 import axios from 'axios';
 import { environment } from '../environment/environment';
 import MyFaculty from '../my-faculty/my-faculty.component';
+import MyTopic from '../my-topic/my-topic.component';
 
 export interface SlideBars {}
 
@@ -29,7 +30,7 @@ export class SlideBar extends React.Component<SlideBars> {
   }
 
   componentDidMount() {
-    this.getUser();
+    // this.getUser();
   }
 
   getUser = () => {
@@ -44,7 +45,6 @@ export class SlideBar extends React.Component<SlideBars> {
         if (res.status === 200) {
           console.log(res)
         }
-     
       }) 
   }
   
@@ -97,15 +97,15 @@ export class SlideBar extends React.Component<SlideBars> {
               </Link>
             </Menu.Item>
             <Menu.Item key="10" icon={<FileOutlined />}>
-              My Topic
+              <Link to="/my-topic">
+               My Topic
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} >
-
             <HeaderInit/>
-
           </Header>
           <Content style={{ margin: '0 16px' }}>
 
@@ -114,6 +114,7 @@ export class SlideBar extends React.Component<SlideBars> {
              <Route path="/topic" component={Topic}></Route>     
              <Route path="/list-topic" component={ListTopic}></Route>   
              <Route path="/my-faculty" component={MyFaculty}/>
+             <Route path="/my-topic" component={MyTopic}></Route>
           </Switch>
 
           </Content>
