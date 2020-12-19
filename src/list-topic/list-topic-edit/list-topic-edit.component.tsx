@@ -3,30 +3,62 @@ import { Button, DatePicker, Form, Input, InputNumber, Select, TimePicker } from
 import axios from 'axios';
 import * as React from 'react';
 import { environment } from '../../environment/environment';
-import { FACULTY, FIELD, LEVEL } from '../../types/components/Topic';
+import { FACULTY, FIELD, LEVEL, TOPIC } from '../../types/components/Topic';
 
 export interface MyState {
     faculty: FACULTY[];
     level: LEVEL[];
     filed: FIELD[];
+    topicDetail: TOPIC[];
 }
 interface IProps {
+  id?: any,
 }
 export class ListTopicEdit extends React.Component<IProps, MyState> {
-    constructor(props: MyState) {
+    constructor(props: Readonly<IProps>) {
         super(props)
         this.state = {
           faculty: [],
           level: [],
           filed: [],
+          topicDetail: [],
         };
       }
-      facultyList: any;
+      
+    facultyList: any;
+    topicDetail: any;
       componentDidMount() {
         this.getListFaculty()
         this.getListLevel();
         this.getListField();
+        if (this.props.id !== undefined) {
+          this.getTopicId(this.props.id)
+        }
       }
+    getTopicId(id: any) {
+        axios.get(`${environment.url}/topic/${id}`,
+        {
+        headers: {
+            Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        }
+        })
+        .then(res => {
+
+          const topicDetail: TOPIC[] = res.data.data;
+          console.log(topicDetail)
+          topicDetail.map((ele: TOPIC) => {
+            ele.nameFaculty = ele.faculty.nameFaculty;
+            ele.nameLevel = ele.level.nameLevel;
+            ele.fieldName = ele.fieldTopic.fieldName
+          }
+          );
+          this.setState({ ...this.state, topicDetail: topicDetail })
+          return this.topicDetail;
+        })
+        .catch((error) => {
+        console.error(error);
+        });
+    }
   
     getListFaculty = () => {
         axios.get(`${environment.url}/faculty/all`,
@@ -94,6 +126,10 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
             }) 
             .catch(error => alert("Wrong") )
       }
+
+    onReset = () => {
+      window.location.href= "/list-topic"
+    };
     
 
     getValueFaculty = (e: any) => {
@@ -106,12 +142,9 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
         console.log("aaaaa")
     }
     onFinish = (values: any) => {
-        console.log(values)
         this.createTopic(values.user);
     };
-
-
-    
+  
   render() {
     const validateMessages = {
         required: '${label} is required!',
@@ -125,9 +158,9 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
       };
     return (
     <div>
-        <Form onFinish={this.onFinish} validateMessages={validateMessages}>
+        <Form  onFinish={this.onFinish} validateMessages={validateMessages}>
       <Form.Item name={['user', 'nameTopic']} label="Title" rules={[{ required: true }]}>
-        <Input style={{float: 'right', width: '370px'}} />
+        <Input value={this.state.topicDetail.nameTopic} style={{float: 'right', width: '370px'}} />
       </Form.Item>
       <Form.Item name={['user', 'facultyId']} label="Faculty" rules={[{ required: true }]}>
       <Select
@@ -198,9 +231,12 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
       <Form.Item name={['user', 'description']} label="Description"  rules={[{ required: true }]}>
         <Input.TextArea  style={{float: 'right', width: '370px'}}/>
       </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
+      <Form.Item style={{textAlign: 'center'}}>
+        <Button type="primary" htmlType="submit" >
           Submit
+        </Button>
+        <Button type="primary" onClick={this.onReset} >
+          Cancel
         </Button>
       </Form.Item>
     </Form>

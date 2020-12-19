@@ -15,10 +15,11 @@ interface MyState {
   level: LEVEL[];
   filed: FIELD[];
   visible: boolean;
-  value: any;
+  isShowEdit: boolean;
+  dataDetail: TOPIC[];
+  id: any;
 }
 interface IProps {
-  value: any;
 }
 export default class ListTopic extends React.Component<IProps, MyState> {
   constructor(props: MyState) {
@@ -29,7 +30,9 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       level: [],
       filed: [],
       visible: false,
-      value: {},
+      isShowEdit: false,
+      dataDetail: [],
+      id: undefined,
     };
   }
 
@@ -56,7 +59,6 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   levelList: any;
   fieldList: any;
   clear: any;
-  isModal: boolean =false;
   parent: any;
 
   getListFaculty = () => {
@@ -117,10 +119,21 @@ export default class ListTopic extends React.Component<IProps, MyState> {
         return this.dataSource;
       })
       .catch(e => console.log(e))
-      this.filter.page=1;
+      // this.filter.page=1;
   }
 
   clearData = () => {
+    this.filter = {
+      search: '',
+      facultyId: undefined,
+      levelId: undefined,
+      fieldId: undefined,
+      page: 1,
+    }
+    this.getTopic();
+  }
+
+  searchData = () => {
     this.filter = {
       search: '',
       facultyId: undefined,
@@ -172,21 +185,24 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   }
 
   showModal = () => {
-    this.setState({
-        visible: true,
-      });
+    this.setState({ visible: true });
   }
   
-  handleOk = () => {
-    this.setState({ visible: false });
-  };
+  showModalEdit = (topicId :any) => {
+    console.log("id", topicId)
+    this.setState({ visible: true, id: topicId })
+  }
 
-  handleCancel = () => {
-    this.setState({ visible: false });
-  };
+  editTopic = () => {
+    this.setState({ isShowEdit: true })
+  }
+  
+  editOk = () => {
+    this.setState({ isShowEdit: false })
+  }
 
-  editTopic = (row: any) => {
-    console.log("aaaaa", row)
+  editCancel = () => {
+    this.setState({ isShowEdit: false })
   }
 
   handleDelete = (topicId: any) => {
@@ -220,7 +236,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       key: "nameTopic",
       width: '35%',
     },
-    {
+    { 
       title: "Faculty",
       dataIndex: "nameFaculty",
       key: "nameFaculty"
@@ -245,13 +261,12 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       key: 'action',
       render: (text: any, record: any) =>
           this.state.data.length >= 1 ? (
-            <div>
-               <Popconfirm style={{display: 'inline-block'}} title="Sure to delete?" onConfirm={() => this.handleDelete(record.topicId)}>
-               Delete
+            <div style={{ display: 'inline-block', float: 'right' }}>
+                <Button onClick={() => this.showModalEdit(record.topicId)}>Edit</Button>
+                <Popconfirm style={{display: 'inline-block'}} title="Sure to delete?" onConfirm={() => this.handleDelete(record.topicId)}>
+                  <Button>Delete</Button> 
                </Popconfirm>
-                <Button style={{display: 'inline-block'}} onClick={this.showModal}>Add</Button>
             </div>
-          
           ) : null,
     },
   ];
@@ -262,13 +277,13 @@ export default class ListTopic extends React.Component<IProps, MyState> {
         <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
           <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
           <div style={{ display: 'inline-block', float: 'right' }}>
-                    <Button  onClick={this.showModal}>Add</Button>
+                    <Button onClick={this.showModal}>Add</Button>
                     <Modal
                     visible={this.state.visible}
                     title="Add Topic"
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}> 
-                        <ListTopicEdit/>
+                    footer={null}
+                    > 
+                        <ListTopicEdit id={this.state.id}/>
                     </Modal>
             <Popover content={<div>
         <div>
@@ -334,7 +349,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
             </Select>
       </div>
       <div style={{padding: '5% 0 5% 69% '}}>
-        <Button onClick={this.getTopic}>Search</Button>
+        <Button onClick={this.searchData}>Search</Button>
       </div>
     </div>} title="Search" trigger="click">
               <Button>Search</Button>
