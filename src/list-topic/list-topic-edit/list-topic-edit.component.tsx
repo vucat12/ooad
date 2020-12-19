@@ -23,10 +23,9 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
           filed: [],
           topicDetail: [],
         };
+        this.getTopicId(this.props.id)
       }
-      
     facultyList: any;
-    topicDetail: any;
       componentDidMount() {
         this.getListFaculty()
         this.getListLevel();
@@ -43,17 +42,11 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
         }
         })
         .then(res => {
-
-          const topicDetail: TOPIC[] = res.data.data;
-          console.log(topicDetail)
-          topicDetail.map((ele: TOPIC) => {
-            ele.nameFaculty = ele.faculty.nameFaculty;
-            ele.nameLevel = ele.level.nameLevel;
-            ele.fieldName = ele.fieldTopic.fieldName
-          }
-          );
-          this.setState({ ...this.state, topicDetail: topicDetail })
-          return this.topicDetail;
+          const topic: TOPIC[] = res.data.data;
+          this.setState({
+            ...this.state, 
+            topicDetail: topic,
+          })
         })
         .catch((error) => {
         console.error(error);
@@ -68,10 +61,10 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
         }
         })
         .then(res => {
-        const faculty: FACULTY[] = res.data;
+          const faculty: FACULTY[] = res.data;
         this.setState({...this.state, faculty: faculty})
-        return this.facultyList;
-        })
+        return this.facultyList;        
+      })
         .catch((error) => {
         console.error(error);
         });
@@ -142,7 +135,8 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
         console.log("aaaaa")
     }
     onFinish = (values: any) => {
-        this.createTopic(values.user);
+      console.log("values", values)
+        this.createTopic(values);
     };
   
   render() {
@@ -158,11 +152,14 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
       };
     return (
     <div>
-        <Form  onFinish={this.onFinish} validateMessages={validateMessages}>
-      <Form.Item name={['user', 'nameTopic']} label="Title" rules={[{ required: true }]}>
-        <Input value={this.state.topicDetail.nameTopic} style={{float: 'right', width: '370px'}} />
+        <Form
+        onFinish={this.onFinish} 
+        validateMessages={validateMessages}
+        >
+      <Form.Item name={['nameTopic']} label="Title" rules={[{ required: true }]}>
+        <Input value="aaaa" style={{float: 'right', width: '370px'}} /> 
       </Form.Item>
-      <Form.Item name={['user', 'facultyId']} label="Faculty" rules={[{ required: true }]}>
+      <Form.Item name={['facultyId']} label="Faculty" rules={[{ required: true }]}>
       <Select
              style={{float: 'right', width: '370px'}} 
               allowClear
@@ -180,7 +177,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
                 : null}
         </Select>
       </Form.Item>
-      <Form.Item name={['user', 'levelId']} label="Level"  rules={[{ required: true }]}>
+      <Form.Item name={['levelId']} label="Level"  rules={[{ required: true }]}>
             <Select
               allowClear
               style={{float: 'right', width: '370px'}} 
@@ -199,7 +196,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
             </Select>
       </Form.Item>
 
-      <Form.Item name={['user', 'fieldId']} label="Field"  rules={[{ required: true }]}>
+      <Form.Item name={['fieldId']} label="Field"  rules={[{ required: true }]}>
           <Select
                allowClear
                style={{float: 'right', width: '370px'}} 
@@ -217,7 +214,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
                 : null}
             </Select>
       </Form.Item>
-      <Form.Item name={['user', 'year']} label="Age"
+      <Form.Item name={['year']} label="Age"
        rules={[
         {
           type: 'number',
@@ -228,7 +225,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
       ]}>
         <InputNumber style={{float: 'right', width: '370px'}} />
       </Form.Item>
-      <Form.Item name={['user', 'description']} label="Description"  rules={[{ required: true }]}>
+      <Form.Item name={['description']} label="Description"  rules={[{ required: true }]}>
         <Input.TextArea  style={{float: 'right', width: '370px'}}/>
       </Form.Item>
       <Form.Item style={{textAlign: 'center'}}>

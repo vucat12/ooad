@@ -10,8 +10,9 @@ function App() {
         <div>
           <Route path="/" exact component={LogIn} />
           <Route path="/topic" exact component={SlideBar} />
-          <Route path="/home-overview" exact component={SlideBar} />
-          <Route path="/list-topic" exact component={SlideBar}></Route>
+          <Route path="/home-overview" exact component={SlideBar}/>
+          <Route path="/list-topic" exact component={SlideBar}/>
+          <Route path="/my-faculty" exact component={SlideBar}/>
         </div> 
       </BrowserRouter>
     </div>

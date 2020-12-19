@@ -1,5 +1,5 @@
 import React from 'react';
-import { DesktopOutlined, FileOutlined, PieChartOutlined, TeamOutlined } from '@ant-design/icons';
+import { ContactsOutlined, DesktopOutlined, FileOutlined, PieChartOutlined, TeamOutlined } from '@ant-design/icons';
 import './menu.component.css';
 import { Layout, Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -8,6 +8,9 @@ import Topic from '../topic/topic.component';
 import { Link, Route, Switch } from 'react-router-dom';
 import HomeOverview from '../home-page/home-page.component';
 import ListTopic from '../list-topic/list-topic.component';
+import axios from 'axios';
+import { environment } from '../environment/environment';
+import MyFaculty from '../my-faculty/my-faculty.component';
 
 export interface SlideBars {}
 
@@ -23,6 +26,26 @@ export class SlideBar extends React.Component<SlideBars> {
     super(props);
     this.valueApi = 0;
     this.isLoading = false;
+  }
+
+  componentDidMount() {
+    this.getUser();
+  }
+
+  getUser = () => {
+    axios({
+      method: 'post',
+      url: `${environment.url}/user/info`,
+      headers: {
+        Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+      }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          console.log(res)
+        }
+     
+      }) 
   }
   
   state = {
@@ -56,7 +79,7 @@ export class SlideBar extends React.Component<SlideBars> {
             </Menu.Item>
             <Menu.Item key="2" icon={<DesktopOutlined />}>
               <Link to="/topic">
-                Topic
+                All Topic
               </Link>
             </Menu.Item>
             <SubMenu key="sub1" icon={<UserOutlined />} title="Faculty">
@@ -68,12 +91,13 @@ export class SlideBar extends React.Component<SlideBars> {
               <Menu.Item key="4">Bill</Menu.Item>
               <Menu.Item key="5">Alex</Menu.Item>
             </SubMenu>
-            <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-              <Menu.Item key="6">Team 1</Menu.Item>
-              <Menu.Item key="8">Team 2</Menu.Item>
-            </SubMenu>
-            <Menu.Item key="9" icon={<FileOutlined />}>
-              Files
+            <Menu.Item key="9" icon={<ContactsOutlined />}>
+              <Link to="/my-faculty">
+              My Faculty
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="10" icon={<FileOutlined />}>
+              My Topic
             </Menu.Item>
           </Menu>
         </Sider>
@@ -89,6 +113,7 @@ export class SlideBar extends React.Component<SlideBars> {
              <Route path="/home-overview" component={HomeOverview}></Route>
              <Route path="/topic" component={Topic}></Route>     
              <Route path="/list-topic" component={ListTopic}></Route>   
+             <Route path="/my-faculty" component={MyFaculty}/>
           </Switch>
 
           </Content>

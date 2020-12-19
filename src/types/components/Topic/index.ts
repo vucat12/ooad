@@ -24,3 +24,19 @@ export type FIELD = {
     fieldName: string
 }
 
+export type LECTURES = {
+    lecturerId: number,
+    dob: any,
+    fullName: string,
+    major: string,
+    email: string,
+    phone: string,
+    contract: string,
+    faculty: string,
+    position: string
+}
+
+export type CONTRACT = {
+    contractId: number,
+    nameContract: string
+}
