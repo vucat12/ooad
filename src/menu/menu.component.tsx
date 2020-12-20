@@ -12,6 +12,7 @@ import axios from 'axios';
 import { environment } from '../environment/environment';
 import MyFaculty from '../my-faculty/my-faculty.component';
 import MyTopic from '../my-topic/my-topic.component';
+import AssignTopic from '../assign-topic/assign-topic.component';
 
 export interface SlideBars {}
 
@@ -101,6 +102,11 @@ export class SlideBar extends React.Component<SlideBars> {
                My Topic
               </Link>
             </Menu.Item>
+            <Menu.Item key="11" icon={<FileOutlined />}>
+              <Link to="/assign-topic">
+               Assign Topic
+              </Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">
@@ -115,6 +121,7 @@ export class SlideBar extends React.Component<SlideBars> {
              <Route path="/list-topic" component={ListTopic}></Route>   
              <Route path="/my-faculty" component={MyFaculty}/>
              <Route path="/my-topic" component={MyTopic}></Route>
+             <Route path="/assign-topic" component={AssignTopic}></Route>
           </Switch>
 
           </Content>

@@ -4,7 +4,7 @@ import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
 import { FACULTY, LEVEL, FIELD, CONTRACT, MYTOPIC, LECTURER_DETAIL } from "../types/components/Topic/index";
-import './my-topic.component.css'
+import './assign-topic.component.css'
 import { LikeOutlined, LoadingOutlined, SmileOutlined, SolutionOutlined, StarOutlined, UserOutlined } from '@ant-design/icons';
 
 interface MyState {
@@ -18,7 +18,7 @@ interface MyState {
 }
 interface IProps {
 }
-export default class MyTopic extends React.Component<IProps, MyState> {
+export default class AssignTopic extends React.Component<IProps, MyState> {
   constructor(props: MyState) {
     super(props)
     this.state = {
@@ -49,6 +49,8 @@ export default class MyTopic extends React.Component<IProps, MyState> {
     fieldName: ''
   }
 
+  teamId: any;
+  topicId: any;
   facultyList: any;
   levelList: any;
   fieldList: any;
@@ -71,7 +73,7 @@ export default class MyTopic extends React.Component<IProps, MyState> {
   };
 
   getTopic = () => {
-    axios.get(`${environment.url}/topic/my-topic`,
+    axios.get(`${environment.url}/topic/assign-topic`,
       {
         headers: {
           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
@@ -86,18 +88,13 @@ export default class MyTopic extends React.Component<IProps, MyState> {
       .catch(e => console.log(e))
   }
 
-  clearData = () => {
-    this.filter = {
-      search: '',
-    }
-    this.getTopic();
-  }
-
   handleChange = (e: any) => {
     this.filter.search = e.target.value;
   }
 
   showModalEdit = (teamId: any, topicId: any) => {
+      this.teamId = teamId;
+      this.topicId = topicId;
     this.setState({ visible: true })
     this.getDetailTopic(teamId, topicId)
   }
@@ -106,8 +103,47 @@ export default class MyTopic extends React.Component<IProps, MyState> {
     this.setState({ visible: false })
   }
 
+  approveDetailTopic = (teamId: any, topicId: any) => {
+    axios({
+        method: 'post',
+        url: `${environment.url}/topic/assign-topic/approve/${topicId}/${teamId}`,
+        headers: {
+            Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+          },
+        })
+        .then(res => {
+          if (res.status === 200) {
+              window.alert("aaaaaaaaaa")
+              this.getTopic();
+          }
+       
+        }) 
+        .catch(error => alert("Wrong") )
+    this.setState({ visible: false});
+  }
+
+  declineDetailTopic = (teamId: any, topicId: any) => {
+    axios({
+        method: 'post',
+        url: `${environment.url}/topic/assign-topic/decline/${topicId}/${teamId}`,
+        headers: {
+            Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+          },
+        })
+        .then(res => {
+          if (res.status === 200) {
+              window.alert("aaaaaaaaaa")
+              this.getTopic();
+          }
+       
+        }) 
+        .catch(error => alert("Wrong") )
+    this.setState({ visible: false});
+  }
+
+
   getDetailTopic = (teamId: any, topicId: any) => {
-    axios.get(`${environment.url}/topic/my-topic/${topicId}/${teamId}`,
+    axios.get(`${environment.url}/topic/assign-topic/${topicId}/${teamId}`,
       {
         headers: {
           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
@@ -196,15 +232,14 @@ export default class MyTopic extends React.Component<IProps, MyState> {
           visible={this.state.visible}
           title="Add Topic"
           width="1200px"
-          onCancel={this.onCancel}
           footer={[
-            <Button key="1" type="primary" disabled={this.stepList.status == "finish" ? true : false}>Approve</Button>,
-            <Button key="2" style={{backgroundColor: '#FA8072', color: 'white'}} disabled={this.stepList.status == "finish" ? true : false}>Decline</Button>,
+            <Button key="1" type="primary" onClick={() => this.approveDetailTopic(this.teamId, this.topicId)}>Approve</Button>,
+            <Button key="2" style={{backgroundColor: '#FA8072', color: 'white'}}  onClick={() => this.declineDetailTopic(this.teamId, this.topicId)}>Decline</Button>,
             <Button key="3" onClick={this.onCancel}>
                 Cancel
             </Button>
           ]}
-          // onOk={this.onOk}
+          onCancel={this.onCancel}
         >
           <div>
             <Row gutter={[24, 24]}>
