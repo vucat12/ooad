@@ -54,3 +54,9 @@ export type MYTOPIC = {
     fieldTopic: string,
     status: string
 }
+
+export type LECTURER_DETAIL = {
+    fullName: string,
+    position: string,
+    primary: boolean
+}

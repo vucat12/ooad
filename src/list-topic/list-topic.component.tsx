@@ -4,8 +4,6 @@ import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
 import { FACULTY, TOPIC, LEVEL, FIELD } from "../types/components/Topic/index";
-import { getFaculty } from '../types/components/Topic/topic.component.services'
-import { DownOutlined } from '@ant-design/icons';
 import './list-topic.component.css'
 import ListTopicEdit from './list-topic-edit/list-topic-edit.component';
 
