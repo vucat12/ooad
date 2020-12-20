@@ -36,6 +36,8 @@ export default class MyTopic extends React.Component<IProps, MyState> {
     this.getTopic();
   }
   dataSource: any;
+  teamId: any;
+  topicId: any;
   filter = {
     search: '',
   }
@@ -46,7 +48,12 @@ export default class MyTopic extends React.Component<IProps, MyState> {
     description: '',
     nameFaculty: '',
     nameLevel: '',
-    fieldName: ''
+    fieldName: '',
+    dateApproved: '',
+    dateExpired: '',
+    dateExtend: '',
+    finish: false,
+    result: undefined,
   }
 
   facultyList: any;
@@ -98,12 +105,60 @@ export default class MyTopic extends React.Component<IProps, MyState> {
   }
 
   showModalEdit = (teamId: any, topicId: any) => {
+    this.teamId = teamId;
+    this.topicId = topicId;
     this.setState({ visible: true })
     this.getDetailTopic(teamId, topicId)
   }
 
   onCancel = () => {
     this.setState({ visible: false })
+  }
+
+  maintainDetailTopic = () => {
+    axios({
+        method: 'put',
+        url: `${environment.url}/topic/my-topic`,
+        headers: {
+            Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        },
+        data: {
+          "topicId": this.topicId,
+          "teamId": this.teamId,
+          "dateExtend": '6',
+        }
+        })
+        .then(res => {
+          if (res.status === 200) {
+              window.alert("OK")
+              this.getTopic();
+          }
+        }) 
+        .catch(error => alert("Wrong") )
+    this.setState({ visible: false});
+  }
+  
+  approveDetailTopic = () => {
+    axios({
+        method: 'put',
+        url: `${environment.url}/topic/my-topic`,
+        headers: {
+            Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        },
+        data: {
+          "topicId": this.topicId,
+          "teamId": this.teamId,
+          "finish": true,
+        }
+        })
+        .then(res => {
+          if (res.status === 200) {
+              window.alert("OK")
+              this.getTopic();
+          }
+        }) 
+        .catch(error => alert("Wrong") )
+    this.setState({ visible: false});
   }
 
   getDetailTopic = (teamId: any, topicId: any) => {
@@ -121,8 +176,15 @@ export default class MyTopic extends React.Component<IProps, MyState> {
           description: res.data.topic.description,
           nameFaculty: res.data.topic.faculty.nameFaculty,
           nameLevel: res.data.topic.level.nameLevel,
-          fieldName: res.data.topic.fieldTopic.fieldName
+          fieldName: res.data.topic.fieldTopic.fieldName,
+          dateApproved:  res.data.dateApproved,
+          dateExpired: res.data.dateExpired,
+          dateExtend: res.data.dateExtend,
+          finish: res.data.finish,
+          result: res.data.result,
         }
+        
+          console.log("Detail===================", this.topicDetail)
 
         this.stepList = {
           start: res.data.start,
@@ -198,13 +260,12 @@ export default class MyTopic extends React.Component<IProps, MyState> {
           width="1200px"
           onCancel={this.onCancel}
           footer={[
-            <Button key="1" type="primary" disabled={this.stepList.status == "finish" ? true : false}>Approve</Button>,
-            <Button key="2" style={{backgroundColor: '#FA8072', color: 'white'}} disabled={this.stepList.status == "finish" ? true : false}>Decline</Button>,
+            <Button key="1" type="primary" onClick={this.approveDetailTopic} disabled={this.stepList.status !== "finish" || this.topicDetail.finish == true ? true : false}>Complete</Button>,
+            <Button key="2" style={{backgroundColor: '#FA8072', color: 'white'}} onClick={this.maintainDetailTopic} disabled={this.stepList.status !== "finish" || this.topicDetail.finish == true ? true : false || this.topicDetail.dateExtend != '0' ? true : false}>Maintain</Button>,
             <Button key="3" onClick={this.onCancel}>
                 Cancel
             </Button>
           ]}
-          // onOk={this.onOk}
         >
           <div>
             <Row gutter={[24, 24]}>
@@ -272,44 +333,72 @@ export default class MyTopic extends React.Component<IProps, MyState> {
                       <Col span={5}>
                         <span><strong>Last updated by: </strong></span>
                       </Col>
-                      <Col span={19}>
+                      <Col span={9}>
                         {this.topicDetail.fullName}
+                      </Col>
+                      <Col span={5}>
+                          <span><strong>Date Approved</strong></span>
+                      </Col>
+                      <Col span={5}>
+                        {this.topicDetail.dateApproved}
                       </Col>
                     </Row>
                     <Row gutter={[8, 8]}>
                       <Col span={5}>
                         <span><strong>Name Topic: </strong> </span>
                       </Col>
-                      <Col span={19}>
+                      <Col span={9}>
                         {this.topicDetail.nameTopic}
+                      </Col>
+                      <Col span={5}>
+                        <span><strong>Date Expired </strong> </span>
+                      </Col>
+                      <Col span={5}>
+                      {this.topicDetail.dateExpired} 
                       </Col>
                     </Row>
                     <Row gutter={[8, 8]}>
                       <Col span={5}>
                         <span><strong>Description: </strong> </span>
                       </Col>
-                      <Col span={19}>
+                      <Col span={9}>
                         {this.topicDetail.description}
+                      </Col>
+                      <Col span={5}>
+                        <span><strong>Month Maintain </strong> </span>
+                      </Col>
+                      <Col span={5}>
+                      {this.topicDetail.dateExtend} Months
                       </Col>
                     </Row>
                     <Row gutter={[8, 8]}>
                       <Col span={5}>
                         <span><strong>Name Faculty: </strong></span>
                       </Col>
-                      <Col span={19}>
+                      <Col span={9}>
                         {this.topicDetail.nameFaculty}
                       </Col>
+                      <Col span={5}>
+                        <span><strong>Finish </strong> </span>
+                      </Col>
+                      <Col span={5}>
+                      {this.topicDetail.finish == true ? 'YES' : 'NO'}
+                      </Col>
                     </Row>
-
                     <Row gutter={[8, 8]}>
                       <Col span={5}>
                         <span><strong>Name Level: </strong></span>
                       </Col>
-                      <Col span={19}>
+                      <Col span={9}>
                         {this.topicDetail.nameLevel}
                       </Col>
+                      <Col span={5}>
+                        <span><strong>Result </strong> </span>
+                      </Col>
+                      <Col span={5}>
+                      {this.topicDetail.result !== undefined ? 'YES' : 'NO'}
+                      </Col>
                     </Row>
-
                     <Row gutter={[8, 8]}>
                       <Col span={5}>
                         <span><strong>Field Name: </strong></span>
