@@ -123,17 +123,6 @@ export default class MyFaculty extends React.Component<IProps, MyState> {
       this.filter.page=1;
   }
 
-  clearData = () => {
-    this.filter = {
-      search: '',
-      contract: undefined,
-      levelId: undefined,
-      fieldId: undefined,
-      page: 1,
-    }
-    this.getTopic();
-  }
-
   getListLevel = () => {
     axios.get(`${environment.url}/level/all`,
     {
@@ -213,6 +202,11 @@ export default class MyFaculty extends React.Component<IProps, MyState> {
       title: "Position",
       key: "position",
       dataIndex: "position"
+    },
+    {
+      title: "Degree",
+      key: "degree",
+      dataIndex: "degree"
     },
   ];
 

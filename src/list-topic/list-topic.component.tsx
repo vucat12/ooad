@@ -6,6 +6,7 @@ import axios from 'axios';
 import { FACULTY, TOPIC, LEVEL, FIELD } from "../types/components/Topic/index";
 import './list-topic.component.css'
 import ListTopicEdit from './list-topic-edit/list-topic-edit.component';
+import ListTopicDetail from './list-topic-detail/list-topic-detail.component';
 
 interface MyState {
   data: TOPIC[];
@@ -13,9 +14,11 @@ interface MyState {
   level: LEVEL[];
   filed: FIELD[];
   visible: boolean;
+  isShowDetail: boolean;
   isShowEdit: boolean;
   dataDetail: TOPIC[];
   id: any;
+  topicDetail: any;
 }
 interface IProps {
 }
@@ -31,6 +34,17 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       isShowEdit: false,
       dataDetail: [],
       id: undefined,
+      isShowDetail: false,
+      topicDetail: {
+        nameTopic: '',
+        facultyId: undefined,
+        nameFaculty: '',
+        levelId: undefined,
+        nameLevel: '',
+        fieldId: undefined,
+        fieldName: '',
+        description: '',
+      }
     };
   }
 
@@ -42,22 +56,14 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   }
   dataSource: any;
 
-  topicDetail = {
-    nameTopic: '',
-    facultyId: 0,
-    nameFaculty: '',
-    levelId: 0,
-    nameLevel: '',
-    fieldId: 0,
-    fieldName: '',
-    description: '',
-  }
+
 
   filter = {
     search: '',
     facultyId: undefined,
     levelId: undefined,
     fieldId: undefined,
+    deleted: undefined,
     page: 1,
   }
   pagination = {
@@ -80,7 +86,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       })
       .then(res => {
         const faculty: FACULTY[] = res.data;
-        this.setState({...this.state, faculty: faculty})
+        this.setState({ ...this.state, faculty: faculty })
         return this.facultyList;
       })
       .catch((error) => {
@@ -97,7 +103,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       })
       .then(res => {
         const field: FIELD[] = res.data;
-        this.setState({...this.state, filed: field})
+        this.setState({ ...this.state, filed: field })
         return this.fieldList;
       })
       .catch((error) => {
@@ -129,7 +135,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
         return this.dataSource;
       })
       .catch(e => console.log(e))
-      // this.filter.page=1;
+    // this.filter.page=1;
   }
 
   searchData = () => {
@@ -138,23 +144,22 @@ export default class ListTopic extends React.Component<IProps, MyState> {
 
   getListLevel = () => {
     axios.get(`${environment.url}/level/all`,
-    {
-      headers: {
-        Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
-      }
-    })
-    .then(res => {
-      const level: LEVEL[] = res.data;
-      this.setState({...this.state, level: level})
-      return this.levelList;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        }
+      })
+      .then(res => {
+        const level: LEVEL[] = res.data;
+        this.setState({ ...this.state, level: level })
+        return this.levelList;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   handleChange = (e: any) => {
-    console.log("aaaaa")
     this.filter.search = e.target.value;
   }
 
@@ -168,7 +173,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   }
 
   getValueFiled = (e: any) => {
-    this.filter.fieldId =  e;
+    this.filter.fieldId = e;
   }
 
   changePagination = (e: any, a: any) => {
@@ -180,36 +185,24 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   showModal = () => {
     this.setState({ visible: true });
   }
-  
-  showModalEdit = (topicId :any, record: any) => {
-    console.log("id", topicId)
 
-    this.topicDetail.nameTopic = record.nameTopic;
-    this.topicDetail.facultyId = record.faculty.facultyId;
-    this.topicDetail.nameFaculty = record.faculty.nameFaculty
-    this.topicDetail.levelId = record.level.levelId;
-    this.topicDetail.nameLevel = record.level.nameLevel;
-    this.topicDetail.fieldId = record.fieldTopic.fieldId;
-    this.topicDetail.fieldName = record.fieldTopic.fieldName;
-    this.topicDetail.description = record.description;
-
-    console.log(this.topicDetail)
-    // nameTopic: '',
-    // facultyId: 0,
-    // nameFaculty: '',
-    // levelId: 0,
-    // nameLevel: '',
-    // fieldId: 0,
-    // fieldName: '',
-    // description: '',
-
+  showModalEdit = (topicId: any, record: any) => {
     this.setState({ visible: true, id: topicId })
+  }
+
+  showModalDetail = (topicId: any) => {
+    this.setState({ isShowDetail: true, id: topicId });
+  }
+
+  onCancelDetail = () => {
+    window.location.href = "/list-topic";
+    this.setState({ isShowDetail: false });
   }
 
   editTopic = () => {
     this.setState({ isShowEdit: true })
   }
-  
+
   editOk = () => {
     this.setState({ isShowEdit: false })
   }
@@ -230,15 +223,19 @@ export default class ListTopic extends React.Component<IProps, MyState> {
         "topicId": topicId,
       },
       headers: {
-          Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+      }
+    })
+      .then(res => {
+        if (res.status === 200) {
+          this.getTopic();
         }
       })
-      .then(res => {
-          if (res.status === 200) {
-            this.getTopic();
-          }
-      }) 
-      .catch(error => alert("Wrong") )
+      .catch(error => alert("Wrong"))
+  }
+
+  getStatusField = (e: any) => {
+    this.filter.deleted = e;
   }
 
   columns: any = [
@@ -251,9 +248,9 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       title: "Name",
       dataIndex: "nameTopic",
       key: "nameTopic",
-      width: '35%',
+      width: '15%',
     },
-    { 
+    {
       title: "Faculty",
       dataIndex: "nameFaculty",
       key: "nameFaculty"
@@ -269,6 +266,11 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       dataIndex: "fieldName"
     },
     {
+      title: "Status",
+      key: "status",
+      dataIndex: "status"
+    },
+    {
       title: "Last Updated",
       key: "updatedAt",
       dataIndex: "updatedAt"
@@ -276,15 +278,31 @@ export default class ListTopic extends React.Component<IProps, MyState> {
     {
       title: 'Action',
       key: 'action',
+      width: '15%',
       render: (text: any, record: any) =>
-          this.state.data.length >= 1 ? (
-            <div style={{ display: 'inline-block', float: 'right' }}>
-                <Button onClick={() => this.showModalEdit(record.topicId, record)}>Edit</Button>
-                <Popconfirm style={{display: 'inline-block'}} title="Sure to delete?" onConfirm={() => this.handleDelete(record.topicId)}>
-                  <Button>Delete</Button> 
-               </Popconfirm>
+        this.state.data.length >= 1 ? (
+          <div style={{ display: 'inline-block' }}>
+            <div style={{display: 'inline-block'}}>
+              <ListTopicDetail id={record.topicId}/>
             </div>
-          ) : null,
+            <div style={{display: 'inline-block'}}>
+            <ListTopicEdit topicDetail={{
+              nameTopic: record.nameTopic,
+              facultyId: record.faculty.facultyId,
+              nameFaculty: record.faculty.nameFaculty,
+              levelId: record.level.levelId,
+              nameLevel: record.level.nameLevel,
+              fieldId: record.fieldTopic.fieldId,
+              fieldName: record.fieldTopic.fieldName,
+              description: record.description,
+            }} id={record.topicId}
+            />
+            </div>
+            <Popconfirm style={{ display: 'inline-block' }} title="Sure to delete?" onConfirm={() => this.handleDelete(record.topicId)}>
+              <Button>Delete</Button>
+            </Popconfirm>
+          </div>
+        ) : null,
     },
   ];
 
@@ -294,99 +312,105 @@ export default class ListTopic extends React.Component<IProps, MyState> {
         <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
           <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
           <div style={{ display: 'inline-block', float: 'right' }}>
-                    <Button onClick={this.showModal}>Add</Button>
-                    <Modal
-                    visible={this.state.visible}
-                    title="Add Topic"
-                    onCancel={this.onCancel}
-                    footer={null}
-                    > 
-                        <ListTopicEdit id={this.state.id} topicDetail={this.topicDetail}/>
-                    </Modal>
+            <div style={{display: 'inline-block'}}>
+            <ListTopicEdit text="Add" topicDetail={this.state.topicDetail}/>
+            </div>
             <Popover content={<div>
-        <div>
-        <span style={{display: 'inline-block', width: '25%'}}>Keyword </span>
-        <Input style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }} onChange={this.handleChange} />
-      </div>
-      <div style={{marginTop: '5%'}}>
-      <span style={{width: '25%', display: 'inline-block'}}>Faculty</span>
-        <Select
-              allowClear
-              style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
-              onChange={this.getValueFaculty}
-            >
-              {this.state.faculty.length > 0
-                ? this.state.faculty.map((dataInformation: FACULTY) => (
-                  <Select.Option
-                    value={dataInformation.facultyId}
-                    key={dataInformation.nameFaculty}
-                  >
-                    {dataInformation.nameFaculty}
-                  </Select.Option>
-                ))
-                : null}
-            </Select>
-      </div>
-      <div style={{marginTop: '5%'}}>
-      <span style={{width: '25%', display: 'inline-block'}}>Level</span>
-        <Select
-              allowClear
-              style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
-              onChange={this.getValueLevel}
-            >
-              {this.state.level.length > 0
-                ? this.state.level.map((dataInformation: LEVEL) => (
-                  <Select.Option
-                    value={dataInformation.levelId}
-                    key={dataInformation.nameLevel}
-                  >
-                    {dataInformation.nameLevel}
-                  </Select.Option>
-                ))
-                : null}
-            </Select>
-      </div>
+              <div>
+                <span style={{ display: 'inline-block', width: '25%' }}>Keyword </span>
+                <Input style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }} onChange={this.handleChange} />
+              </div>
+              <div style={{ marginTop: '5%' }}>
+                <span style={{ width: '25%', display: 'inline-block' }}>Faculty</span>
+                <Select
+                  allowClear
+                  style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }}
+                  onChange={this.getValueFaculty}
+                >
+                  {this.state.faculty.length > 0
+                    ? this.state.faculty.map((dataInformation: FACULTY) => (
+                      <Select.Option
+                        value={dataInformation.facultyId}
+                        key={dataInformation.nameFaculty}
+                      >
+                        {dataInformation.nameFaculty}
+                      </Select.Option>
+                    ))
+                    : null}
+                </Select>
+              </div>
+              <div style={{ marginTop: '5%' }}>
+                <span style={{ width: '25%', display: 'inline-block' }}>Level</span>
+                <Select
+                  allowClear
+                  style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }}
+                  onChange={this.getValueLevel}
+                >
+                  {this.state.level.length > 0
+                    ? this.state.level.map((dataInformation: LEVEL) => (
+                      <Select.Option
+                        value={dataInformation.levelId}
+                        key={dataInformation.nameLevel}
+                      >
+                        {dataInformation.nameLevel}
+                      </Select.Option>
+                    ))
+                    : null}
+                </Select>
+              </div>
 
-      <div style={{marginTop: '5%'}}>
-      <span style={{width: '25%', display: 'inline-block'}}>Field</span>
-        <Select
-               allowClear
-              style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
-              onChange={this.getValueFiled}
-            >
-              {this.state.filed.length > 0
-                ? this.state.filed.map((dataInformation: FIELD) => (
-                  <Select.Option
-                    value={dataInformation.fieldId}
-                    key={dataInformation.fieldName}
-                  >
-                    {dataInformation.fieldName}
-                  </Select.Option>
-                ))
-                : null}
-            </Select>
-      </div>
-      <div style={{padding: '5% 0 5% 69% '}}>
-        <Button onClick={this.searchData}>Search</Button>
-      </div>
-    </div>} title="Search" trigger="click">
-              <Button>Search</Button>
+              <div style={{ marginTop: '5%' }}>
+                <span style={{ width: '25%', display: 'inline-block' }}>Field</span>
+                <Select
+                  allowClear
+                  style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }}
+                  onChange={this.getValueFiled}
+                >
+                  {this.state.filed.length > 0
+                    ? this.state.filed.map((dataInformation: FIELD) => (
+                      <Select.Option
+                        value={dataInformation.fieldId}
+                        key={dataInformation.fieldName}
+                      >
+                        {dataInformation.fieldName}
+                      </Select.Option>
+                    ))
+                    : null}
+                </Select>
+              </div>
+
+              <div style={{ marginTop: '5%' }}>
+                <span style={{ width: '25%', display: 'inline-block' }}>Status</span>
+                <Select
+                  allowClear
+                  style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }}
+                  onChange={this.getStatusField}
+                >
+                  <Select.Option value="0">ACTIVE</Select.Option>
+                  <Select.Option value="1">DELETED</Select.Option>
+                </Select>
+              </div>
+              <div style={{ padding: '5% 0 5% 69% ' }}>
+                <Button onClick={this.searchData}>Search</Button>
+              </div>
+            </div>} title="Search" trigger="click">
+              <Button style={{display: 'inline-block'}}>Search</Button>
             </Popover>
           </div>
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
-          <Table 
-          columns={this.columns} 
-          dataSource={this.state.data} 
-          pagination = {
-            {
-              size: 'small',
-              current: this.pagination.page,
-              total: this.pagination.totalItem,
-              pageSize: this.pagination.amount,
+          <Table
+            columns={this.columns}
+            dataSource={this.state.data}
+            pagination={
+              {
+                size: 'small',
+                current: this.pagination.page,
+                total: this.pagination.totalItem,
+                pageSize: this.pagination.amount,
+              }
             }
-          }
-          onChange= {this.changePagination}
+            onChange={this.changePagination}
           />
         </div>
       </div>

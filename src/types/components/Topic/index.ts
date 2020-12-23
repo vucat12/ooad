@@ -7,7 +7,9 @@ export type TOPIC = {
     fieldTopic:FIELD,
     fieldName: string,
     updatedAt: Date,
-    updatedBy: string
+    updatedBy: string,
+    year: number,
+    status: string
   }
   
 export type FACULTY = {
@@ -33,7 +35,8 @@ export type LECTURES = {
     phone: string,
     contract: string,
     faculty: string,
-    position: string
+    position: string,
+    degree: string
 }
 
 export type CONTRACT = {
@@ -52,10 +55,32 @@ export type MYTOPIC = {
     facultyName: string,
     levelName: string,
     fieldTopic: string,
-    status: string
+    status: string,
+    year: number,
 }
 
 export type LECTURER_DETAIL = {
+    fullName: string,
+    position: string,
+    primary: boolean
+}
+
+export type DETAIL_FACULTY = {
+    key: number,
+    teamId: number,
+    completed: string,
+    current: number,
+    dateApproved: string,
+    dateExpired: string,
+    dateExtend: string,
+    facultyReview: string,
+    finish: boolean,
+    start: string,
+    status: string,
+    team: TEAM[],
+}
+
+export type TEAM = {
     fullName: string,
     position: string,
     primary: boolean

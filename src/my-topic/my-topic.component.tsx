@@ -137,7 +137,7 @@ export default class MyTopic extends React.Component<IProps, MyState> {
         .catch(error => alert("Wrong") )
     this.setState({ visible: false});
   }
-  
+
   approveDetailTopic = () => {
     axios({
         method: 'put',
@@ -227,6 +227,11 @@ export default class MyTopic extends React.Component<IProps, MyState> {
       title: "Field Topic",
       key: "fieldTopic",
       dataIndex: "fieldTopic"
+    },
+    {
+      title: "Year",
+      key: "year",
+      dataIndex: "year"
     },
     {
       title: "Description",
@@ -382,7 +387,7 @@ export default class MyTopic extends React.Component<IProps, MyState> {
                         <span><strong>Finish </strong> </span>
                       </Col>
                       <Col span={5}>
-                      {this.topicDetail.finish == true ? 'YES' : 'NO'}
+                      {this.topicDetail.finish}
                       </Col>
                     </Row>
                     <Row gutter={[8, 8]}>
@@ -396,7 +401,7 @@ export default class MyTopic extends React.Component<IProps, MyState> {
                         <span><strong>Result </strong> </span>
                       </Col>
                       <Col span={5}>
-                      {this.topicDetail.result !== undefined ? 'YES' : 'NO'}
+                      {this.topicDetail.result}
                       </Col>
                     </Row>
                     <Row gutter={[8, 8]}>

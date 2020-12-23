@@ -19,6 +19,7 @@ interface MyState {
 interface IProps {
 }
 export default class Topic extends React.Component<IProps, MyState> {
+  divRef:any = React.createRef<HTMLDivElement>();
   constructor(props: MyState) {
     super(props)
     this.state = {
@@ -44,6 +45,8 @@ export default class Topic extends React.Component<IProps, MyState> {
     facultyId: undefined,
     levelId: undefined,
     fieldId: undefined,
+    year: undefined,
+    deleted: undefined,
     page: 1,
   }
   pagination = {
@@ -125,6 +128,8 @@ export default class Topic extends React.Component<IProps, MyState> {
       facultyId: undefined,
       levelId: undefined,
       fieldId: undefined,
+      year: undefined,
+      deleted: undefined,
       page: 1,
     }
     this.getTopic();
@@ -178,6 +183,7 @@ export default class Topic extends React.Component<IProps, MyState> {
 
   onCancel = () => {
     this.setState({ visible: false })
+    this.divRef.current.resetFields();
   }
 
   onFinish = (values: any) => {
@@ -239,6 +245,14 @@ export default class Topic extends React.Component<IProps, MyState> {
       .catch(error => alert("Wrong") )
   }
 
+  handleYear = (e: any) => {
+    this.filter.year = e.target.value;
+  }
+
+  getStatusField = (e: any) => {
+    this.filter.deleted = e;
+  }
+
   columns: any = [
     {
       title: "ID",
@@ -264,6 +278,16 @@ export default class Topic extends React.Component<IProps, MyState> {
       title: "Field",
       key: "fieldName",
       dataIndex: "fieldName"
+    },
+    {
+      title: "Year",
+      key: "year",
+      dataIndex: "year"
+    },
+    {
+      title: "Status",
+      key: "status",
+      dataIndex: "status"
     },
     {
       title: "Last Updated",
@@ -292,6 +316,10 @@ export default class Topic extends React.Component<IProps, MyState> {
         <span style={{display: 'inline-block', width: '25%'}}>Keyword </span>
         <Input style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }} onChange={this.handleChange} />
       </div>
+      <div style={{marginTop: '5%'}}>
+        <span style={{display: 'inline-block', width: '25%'}}>Year </span>
+        <Input style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }} onChange={this.handleYear} />
+      </div>    
       <div style={{marginTop: '5%'}}>
       <span style={{width: '25%', display: 'inline-block'}}>Faculty</span>
         <Select
@@ -350,6 +378,19 @@ export default class Topic extends React.Component<IProps, MyState> {
                 : null}
             </Select>
       </div>
+  
+      <div style={{marginTop: '5%'}}>
+      <span style={{width: '25%', display: 'inline-block'}}>Status</span>
+        <Select
+               allowClear
+              style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
+              onChange={this.getStatusField}
+            >
+                  <Select.Option value="0">ACTIVE</Select.Option>
+                  <Select.Option value="1">DELETED</Select.Option>
+            </Select>
+      </div>
+
       <div style={{padding: '5% 0 5% 69% '}}>
         <Button onClick={this.getTopic}>Search</Button>
       </div>
@@ -381,7 +422,8 @@ export default class Topic extends React.Component<IProps, MyState> {
           onCancel={this.onCancel}
           > 
             <div>
-            <Form name="complex-form" onFinish={this.onFinish} >
+            <Form name="complex-form" onFinish={this.onFinish}
+            ref={this.divRef} >
               <Form.Item
                style={{margin: '0 2%'}}
               >
