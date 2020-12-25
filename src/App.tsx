@@ -17,8 +17,8 @@ function App() {
           <Route path="/assign-topic" exact component={SlideBar}/>
           <Route path="/list-lecturer" exact component={SlideBar}/>
           <Route path="/topic-council" exact component={SlideBar}/> */}
-
-          <Route path="/(topic|home-overview|list-topic|my-faculty|my-topic|assign-topic|list-lecturer|topic-council)" component={SlideBar} />
+          
+          <Route path="/(topic|home-overview|list-topic|my-faculty|my-topic|assign-topic|list-lecturer|topic-council|list-council)" component={SlideBar} />
 
         </div> 
       </BrowserRouter>

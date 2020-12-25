@@ -52,7 +52,7 @@ export default class MyTopic extends React.Component<IProps, MyState> {
     dateApproved: '',
     dateExpired: '',
     dateExtend: '',
-    finish: false,
+    finish: '',
     result: undefined,
   }
 
@@ -265,8 +265,8 @@ export default class MyTopic extends React.Component<IProps, MyState> {
           width="1200px"
           onCancel={this.onCancel}
           footer={[
-            <Button key="1" type="primary" onClick={this.approveDetailTopic} disabled={this.stepList.status !== "finish" || this.topicDetail.finish == true ? true : false}>Complete</Button>,
-            <Button key="2" style={{backgroundColor: '#FA8072', color: 'white'}} onClick={this.maintainDetailTopic} disabled={this.stepList.status !== "finish" || this.topicDetail.finish == true ? true : false || this.topicDetail.dateExtend != '0' ? true : false}>Maintain</Button>,
+            <Button key="1" type="primary" onClick={this.approveDetailTopic} disabled={this.stepList.status !== "finish" || this.topicDetail.finish == 'COMPLETED' ? true : false}>Complete</Button>,
+            <Button key="2" style={{backgroundColor: '#FA8072', color: 'white'}} onClick={this.maintainDetailTopic} disabled={this.stepList.status !== "finish" || this.topicDetail.finish == 'COMPLETED' ? true : false || this.topicDetail.dateExtend != '0' ? true : false}>Maintain</Button>,
             <Button key="3" onClick={this.onCancel}>
                 Cancel
             </Button>

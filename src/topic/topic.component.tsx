@@ -437,6 +437,7 @@ export default class Topic extends React.Component<IProps, MyState> {
                 allowClear
                 style={{width: '236px '}}
                 showSearch
+                
                 >
                 {this.state.userDetail.length > 0
                 ? this.state.userDetail.map((dataInformation: NameLecturer) => (
@@ -469,6 +470,7 @@ export default class Topic extends React.Component<IProps, MyState> {
                 allowClear
                 style={{width: '236px '}}
                 showSearch
+                
                 >
                 {this.state.userDetail.length > 0
                 ? this.state.userDetail.map((dataInformation: NameLecturer) => (
@@ -532,6 +534,7 @@ export default class Topic extends React.Component<IProps, MyState> {
                 allowClear
                 style={{width: '236px '}}
                 showSearch
+                
                 >
                 {this.state.userDetail.length > 0
                 ? this.state.userDetail.map((dataInformation: NameLecturer) => (
@@ -563,6 +566,7 @@ export default class Topic extends React.Component<IProps, MyState> {
                 allowClear
                 style={{width: '236px '}}
                 showSearch
+                
                 >
                 {this.state.userDetail.length > 0
                 ? this.state.userDetail.map((dataInformation: NameLecturer) => (

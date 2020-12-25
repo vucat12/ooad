@@ -15,6 +15,7 @@ import MyTopic from '../my-topic/my-topic.component';
 import AssignTopic from '../assign-topic/assign-topic.component';
 import ListLecturer from '../list-lecturer/list-lecturer.component';
 import TopicCouncil from '../council/council.component';
+import ListCouncil from '../list-council/list-council.component';
 
 export interface SlideBars {
   isRole: any;
@@ -114,6 +115,11 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
                  Topic Council 
                 </Link>
               </Menu.Item>
+              <Menu.Item key="6">
+                <Link to="/list-council">
+                 List Council 
+                </Link>
+              </Menu.Item>
             </SubMenu>
             }
 
@@ -152,6 +158,7 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
              {(this.state.isRole === 'MANAGER' || this.state.isRole === 'ADMIN') &&  <Route path="/assign-topic" component={AssignTopic}></Route>}
              {this.state.isRole==='MANAGER' && <Route path="/list-lecturer" component={ListLecturer}></Route>}
              {this.state.isRole==='MANAGER' && <Route path="/topic-council" component={TopicCouncil}></Route>}
+             {this.state.isRole==='MANAGER' && <Route path="/list-council" component={ListCouncil}></Route>}
           </Switch>
 
           </Content>

@@ -1,26 +1,35 @@
 
-import { Breadcrumb, Table } from 'antd';
+import { Breadcrumb, Button, Form, Input, Select, Space, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
-import { TOPIC } from "../types/components/Topic/index";
+import { NameLecturer, TOPIC } from "../types/components/Topic/index";
 import './council.component.css'
+import Modal from 'antd/lib/modal/Modal';
 
 interface MyState {
   data: TOPIC[];
+  visible: boolean;
+  userDetail: NameLecturer[];
+  topicId: number;
 }
 interface IProps {
 }
 export default class TopicCouncil extends React.Component<IProps, MyState> {
+  divRef:any = React.createRef<HTMLDivElement>();
   constructor(props: MyState) {
     super(props)
     this.state = {
       data: [],
+      visible: false,
+      userDetail: [],
+      topicId: 0,
     };
   }
 
   componentDidMount() {
     this.getTopic();
+    this.getListUser();
   }
   dataSource: any;
   getTopic = () => {
@@ -41,6 +50,73 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
 
       })
       .catch(e => console.log(e))
+  }
+
+  getListUser = () => {
+    axios.get(`${environment.url}/user`,
+    {
+      headers: {
+        Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+      }, 
+    })
+    .then(res => {
+      console.log(res)
+      const userDetail: NameLecturer[] = res.data;
+      this.setState({...this.state, userDetail: userDetail})
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+  createUser = (topicId: any, data: any) => {
+    axios({
+      method: 'post',
+      url: `${environment.url}/council/create-council/${topicId}`,
+      data: data, 
+      headers: {
+          Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        }
+      })
+      .then(res => {
+          if (res.status === 200) {
+              alert("Ok")
+          }
+      }) 
+      .catch(error => alert("Wrong") )
+  }
+
+  showModal = (record: any) => {
+    this.setState({ visible: true, topicId: record.topicId })
+  }
+
+  onCancel = () => {
+    this.setState({ visible: false })
+    this.divRef.current.resetFields();
+  }
+
+  onFinish = (values: any) => {
+    console.log("====", values)
+    const fullMember = [{
+      "username": values.username,
+      "positionId": 1,
+    }, {
+      "username": values.username1,
+      "positionId": 2,
+    }, {
+      "username": values.username2,
+      "positionId": 3,
+    }, {
+      "username": values.username3,
+      "positionId": 4,
+    }, {
+      "username": values.username4,
+      "positionId": 5,
+    }]
+    this.createUser(this.state.topicId, fullMember);
+    this.getTopic();
+    this.setState({ visible: false })
+    
   }
 
   columns: any = [
@@ -73,23 +149,38 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
       title: "Status",
       key: "status",
       dataIndex: "status"
-    },
+    },{
+      title: 'Action',
+      key: 'action',
+      render: (text: any, record: any) => (
+        <Space size="middle">
+          <Button onClick={() => this.showModal(record)}>Create Council</Button>
+        </Space>
+      ),
+    }
   ];
 
   render() {
+    const validateMessages = {
+      required: '${label} is required!',
+      types: {
+        email: '${label} is not a valid email!',
+        number: '${label} is not a valid number!',
+      },
+      number: {
+        range: '${label} must be between ${min} and ${max}',
+      },
+    };
     return (
       <div>
-
         <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
           <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
         </Breadcrumb>
-
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table 
           columns={this.columns} 
           dataSource={this.state.data} 
-        //   onChange= {this.changePagination}
-        expandable={{
+          expandable={{
             expandedRowRender: record => <div style={{ margin: 0 }}>
              <div>
             {record.members[0]?.fullName != undefined ? <div style={{ width: '385px', display: 'inline-block' }}> Full Name: {record.members[0].fullName}</div> : undefined}
@@ -118,6 +209,148 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
           }}
           />
         </div>
+        <Modal
+          visible={this.state.visible}
+          title="Register Topic"
+          footer={null}
+          width="36%"
+          onCancel={this.onCancel}
+          > 
+            <div>
+            <Form name="complex-form" onFinish={this.onFinish}
+            validateMessages={validateMessages}
+            ref={this.divRef} >
+                <Form.Item
+                name="username"
+                label="President of Council"
+                rules={[{ required: true }]}
+                style={{ display: 'inline-block', margin: '0 2%', width: '96%'}}
+                >
+                <Select
+                allowClear
+                showSearch
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+              </Select>
+                </Form.Item>
+                <Form.Item
+                name="username1"
+                label="Reviewer 1"
+                rules={[{ required: true }]}
+                style={{ display: 'inline-block', width: '96% ', margin: '0 2%'}}
+                >
+                <Select
+                allowClear
+                showSearch
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+                </Select>
+
+                </Form.Item>
+              
+                <Form.Item
+                name="username2"
+                label="Reviewer 2"
+                rules={[{ required: true }]}
+                style={{ display: 'inline-block', width: '96% ', margin: '0 2%'}}
+                >
+                  <Select
+                allowClear
+                showSearch
+                
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+                </Select>
+                </Form.Item>
+                <Form.Item
+                name="username3"
+                label="Secretary"
+                style={{ display: 'inline-block', width: '96% ', margin: '0 2%'}}
+                >
+                 <Select
+                allowClear
+                showSearch
+                
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+                </Select>
+                </Form.Item>
+                <Form.Item
+                name="username4"
+                label="Commissioner"
+                style={{ display: 'inline-block', width: '96%', margin: '0 2%'}}
+                >
+                  <Select
+                allowClear
+                showSearch
+                
+                >
+                {this.state.userDetail.length > 0
+                ? this.state.userDetail.map((dataInformation: NameLecturer) => (
+                  <Select.Option
+                    value={dataInformation.username}
+                    key={dataInformation.username}
+                  >
+                    {dataInformation.username}
+                  </Select.Option>
+                ))
+                : null}
+                </Select>
+                </Form.Item>
+              
+              <Form.Item
+               colon={false}
+              >
+                <div style={{float: 'right', paddingRight: '1.5%', paddingTop: '2%', transform: 'translateY(40%)'}}>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+                <Button type="ghost" onClick={this.onCancel}>
+                  Cancel
+                </Button>
+                </div>
+              </Form.Item>
+            </Form>
+            </div>
+          </Modal>
+      
+
       </div>
     )
   }

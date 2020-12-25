@@ -96,3 +96,10 @@ export type DETAIL_TOPIC_LECTURER = {
     dateRegister: string,
     topic: TOPIC,
 }
+
+export type LIST_COUNCIL = {
+    councilId: number,
+    nameTopic: string,
+    presidentOfCouncil: string,
+    totalRegister: number
+}
