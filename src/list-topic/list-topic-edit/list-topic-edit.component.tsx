@@ -34,38 +34,11 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
     return true;
   }
   componentDidMount() {
-    this.getListFaculty()
-    this.getListLevel();
-    this.getListField();
+ 
     if (this.props.id !== undefined) {
       // this.getTopicId(this.props.id)
     }
   }
-  // getTopicId(id: any) {
-  //     axios.get(`${environment.url}/topic/${id}`,
-  //     {
-  //     headers: {
-  //         Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
-  //     }
-  //     })
-  //     .then(res => {
-  //       console.log("---------", res.data.data)
-
-  //       this.topicDetail = {
-  //         nameTopic: res.data.data.nameTopic,
-  //         facultyId: res.data.data.faculty.facultyId,
-  //         nameFaculty: res.data.data.faculty.nameFaculty,
-  //         levelId: res.data.data.level.levelId,
-  //         nameLevel: res.data.data.level.nameLevel,
-  //         fieldId: res.data.data.fieldTopic.fieldId,
-  //         fieldName: res.data.data.fieldTopic.fieldName,
-  //         description: res.data.data.fieldTopic.description,
-  //       }
-  //     })
-  //     .catch((error) => {
-  //     console.error(error);
-  //     });
-  // }
 
   getListFaculty = () => {
     axios.get(`${environment.url}/faculty/all`,
@@ -182,6 +155,9 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
   };
 
   showModalEdit = () => {
+    this.getListFaculty();
+    this.getListLevel();
+    this.getListField();
     this.setState({ display: true });
   }
 

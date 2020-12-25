@@ -9,8 +9,11 @@ export type TOPIC = {
     updatedAt: Date,
     updatedBy: string,
     year: number,
-    status: string
-  }
+    status: string,
+    members: TEAM[],
+    key: number,
+    teamId: number
+}
   
 export type FACULTY = {
     facultyId: string,
@@ -84,4 +87,12 @@ export type TEAM = {
     fullName: string,
     position: string,
     primary: boolean
+}
+
+export type DETAIL_TOPIC_LECTURER = {
+    dateApprove: string,
+    result: string,
+    finish: string,
+    dateRegister: string,
+    topic: TOPIC,
 }

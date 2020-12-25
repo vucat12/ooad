@@ -123,7 +123,6 @@ export default class ListTopic extends React.Component<IProps, MyState> {
         this.pagination.page = res.data.page;
         this.pagination.totalItem = res.data.totalItem;
         this.pagination.amount = res.data.amount;
-        console.log(this.pagination)
         const dataSource: TOPIC[] = res.data.contents;
         dataSource.map((ele: TOPIC) => {
           ele.nameFaculty = ele.faculty.nameFaculty;
@@ -168,7 +167,6 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   }
 
   getValueLevel = (e: any) => {
-    console.log(e)
     this.filter.levelId = e;
   }
 
@@ -177,7 +175,6 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   }
 
   changePagination = (e: any, a: any) => {
-    console.log('aaaaa', e)
     this.filter.page = e.current;
     this.getTopic();
   }
@@ -278,7 +275,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
     {
       title: 'Action',
       key: 'action',
-      width: '15%',
+      width: '20%',
       render: (text: any, record: any) =>
         this.state.data.length >= 1 ? (
           <div style={{ display: 'inline-block' }}>

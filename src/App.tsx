@@ -9,12 +9,17 @@ function App() {
       <BrowserRouter>
         <div>
           <Route path="/" exact component={LogIn} />
-          <Route path="/topic" exact component={SlideBar} />
+          {/* <Route path="/topic" exact component={SlideBar} />
           <Route path="/home-overview" exact component={SlideBar}/>
           <Route path="/list-topic" exact component={SlideBar}/>
           <Route path="/my-faculty" exact component={SlideBar}/>
           <Route path="/my-topic" exact component={SlideBar}/>
           <Route path="/assign-topic" exact component={SlideBar}/>
+          <Route path="/list-lecturer" exact component={SlideBar}/>
+          <Route path="/topic-council" exact component={SlideBar}/> */}
+
+          <Route path="/(topic|home-overview|list-topic|my-faculty|my-topic|assign-topic|list-lecturer|topic-council)" component={SlideBar} />
+
         </div> 
       </BrowserRouter>
     </div>
