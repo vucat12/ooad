@@ -23,7 +23,7 @@ export default class CouncilReview extends React.Component<IProps, MyState> {
         topicId: undefined,
         councilId: undefined,
         teamId: undefined,
-      }
+      },
     };
   }
 
@@ -45,6 +45,10 @@ export default class CouncilReview extends React.Component<IProps, MyState> {
         console.log(this.state.data)
       })
       .catch(e => console.log(e))
+  }
+
+  hidden = (e: any) => {
+    console.log("aaaaa", e)
   }
 
   columns: any = [
@@ -70,8 +74,8 @@ export default class CouncilReview extends React.Component<IProps, MyState> {
     },
     {
       title: "Score",
-      key: "score",
-      dataIndex: "score"
+      key: "scoreString",
+      dataIndex: "scoreString"
     },
     {
       title: 'Action',
@@ -79,14 +83,12 @@ export default class CouncilReview extends React.Component<IProps, MyState> {
       render: (text: any, record: any) =>
         this.state.data.length >= 1 ? (
           <div>
-            {record.topicId}
-            {record.councilId}
-            {record.teamId}
               <CouncilReviewDetail listId={{
                 topicId: record.topicId,
                 councilId: record.councilId,
                 teamId: record.teamId,
-              }}/>
+              }} score={record.score} comment={record.commnet}
+              />
           </div>
         ) : null,
     },

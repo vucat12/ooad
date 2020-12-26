@@ -108,6 +108,12 @@ export class ListCouncilDetail extends React.Component<IProps, MyState> {
       dataIndex: "nameTopic",
       key: "nameTopic"
     },
+    
+      {
+        title: "Leader Team",
+        dataIndex: "leader",
+        key: "leader"
+      },
     {
       title: "Level Name",
       dataIndex: "levelName",

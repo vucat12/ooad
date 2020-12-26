@@ -1,18 +1,24 @@
 
-import { Button, Card, Col, Row,Table } from 'antd';
+import { Button, Card, Col, Form, Input, Row,Table } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
 import axios from 'axios';
 import * as React from 'react';
+import { Link, Route } from 'react-router-dom';
 import { environment } from '../../environment/environment';
-import { CONTRACT, DETAIL_FACULTY, DETAIL_TOPIC_LECTURER, FACULTY, FIELD, LEVEL, NameLecturer, TEAM } from '../../types/components/Topic';
+import { NameLecturer, TEAM } from '../../types/components/Topic';
+import CouncilReview from '../council-review.component';
 
 interface MyState {
   data: NameLecturer[];
   team: TEAM[];
   display: boolean;
+  score: number;
 }
 interface IProps {
   listId?: any;
+  score?: any;
+  comment?: any;
 }
 export class CouncilReviewDetail extends React.Component<IProps, MyState> {
   constructor(props: IProps) {
@@ -21,6 +27,7 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
       data: [],
       team: [],
       display: false,
+      score: 0
     };
   }
 
@@ -49,12 +56,7 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
         params:{ ...this.props.listId }
       })
       .then(res => {
-        console.log(res.data)
-        const dataSource: NameLecturer[] = res.data.members;
-        this.setState({ ...this.state, data: dataSource })
-
-
-
+        this.setState({ score: res.data.score})
         this.topic = {
           updatedAt: res.data.topic.updatedAt,
           fullName: res.data.topic.updatedBy.fullName,
@@ -67,15 +69,43 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
           fieldName: res.data.topic.fieldTopic.fieldName,
           status: res.data.topic.status
         }
-        console.log(this.topic)
+        const dataSource: NameLecturer[] = res.data.members;
+        this.setState({ ...this.state, data: dataSource})
       })
       .catch(e => console.log(e))
   }
 
+  postScoreComment = (value: any) => {
+    axios({
+      method: 'post',
+      url: `${environment.url}/council/review-detail`,
+      headers: {
+          Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        },
+        data: value
+      })
+      .then(res => {
+      }) 
+      .catch(error => alert("Wrong") )
+  this.setState({ display: false});
+  }
+
   showModalEdit = () => {
-    console.log(this.props.listId)
     this.setState({ display: true });
     this.getCouncilReview();
+  }
+
+  onFinish = (values: any) => {
+    let init = {
+...values,
+...this.props.listId
+    }
+this.postScoreComment(init)
+    this.setState({ display: false })
+  }
+
+  onCancel = () => {
+    this.setState({ display: false});
   }
 
   columns: any = [
@@ -101,7 +131,9 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
     },
   ];
   render() {
-    
+        const validateMessages = {
+      required: '${label} is required!',
+    };
     return (
       <div>
         <Button onClick={this.showModalEdit}>Detail </Button>
@@ -109,16 +141,76 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
           visible={this.state.display}
           title="Add Topic"
           width="1200px"
-          onCancel={() => this.setState({ display: false })}
+          onCancel={this.onCancel}
           footer={null}>
       <div style={{overflow: 'hidden', margin: '0 15px' }}>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 360}}>
-        <Table 
-        columns={this.columns} 
-        dataSource={this.state.data}
-        pagination={false}
-        />
-      </div>
+        <Row>
+          <Col span={12}>
+          <Card title="Default size card" style={{ width: 500 }}>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Full Name:</div>  {this.topic.fullName}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Update at:</div >  {this.topic.updatedAt}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}> Topic Id:</div> {this.topic.topicId}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Name Topic:</div>  {this.topic.nameTopic}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Year:</div>  {this.topic.year}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Description:</div>  {this.topic.description}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Name Faculty: </div> {this.topic.nameFaculty}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Name Level: </div> {this.topic.nameLevel}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Field Name:</div>  {this.topic.fieldName}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block'}}> Status:</div> {this.topic.status}</div></p>
+          </Card>
+          </Col>
+          <Col span={12}>
+              <Table 
+              columns={this.columns} 
+              dataSource={this.state.data}
+              pagination={false}
+              />
+        <div style={{paddingTop: '40px'}}>
+              <Form
+               validateMessages={validateMessages}
+                labelCol={{
+                  span: 8,
+                }}
+                wrapperCol={{
+                  span: 16,
+                }}
+           name="basic"
+      initialValues={{
+        score: this.props.score,
+        commnet: this.props.comment
+      }}
+      onFinish={this.onFinish}
+    >
+      <Form.Item
+        label="Score"
+        name="score"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input type="number" min="1" max="100" disabled={this.props.score != undefined ? true : false}/>
+      </Form.Item>
+        <Form.Item
+          label="Comment"
+          name="comment"
+        >
+          <TextArea  disabled={this.props.score != undefined ? true : false}/>
+        </Form.Item>
+
+        <Form.Item style={{float : 'right'}}>
+          <Button type="primary" htmlType="submit" disabled={this.props.score != undefined ? true : false}>
+            Submit
+          </Button>
+
+        </Form.Item>
+      </Form>
+              </div>
+          </Col>
+        </Row>
+        </div>
     </div>
     </Modal>
     </div>

@@ -53,7 +53,7 @@ export type NameLecturer = {
     position: string,
     nameLecturer: string,
     score: string,
-    comment: string
+    comment: string,
 }
 
 export type MYTOPIC = {
@@ -105,7 +105,7 @@ export type LIST_COUNCIL = {
     councilId: number,
     nameTopic: string,
     presidentOfCouncil: string,
-    totalRegister: number
+    totalRegister: number,
 }
 
 export type TEAM_TOPIC = {
@@ -117,6 +117,7 @@ export type TEAM_TOPIC = {
     year: number,
     result: string,
     recordList: NameLecturer[],
+    leader: string
 }
 
 export type COUNCIL_REVIEW = {

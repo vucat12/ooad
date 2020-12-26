@@ -25,7 +25,7 @@ export default class ListCouncil extends React.Component<IProps, MyState> {
   }
 
   getListCouncil = () => {
-    axios.get(`${environment.url}/council`,
+    axios.get(`${environment.url}/council/faculty`,
       {
         headers: {
           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`

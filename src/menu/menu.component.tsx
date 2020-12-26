@@ -1,5 +1,5 @@
 import React from 'react';
-import { ContactsOutlined, DesktopOutlined, FileOutlined, FireOutlined, PieChartOutlined, TeamOutlined } from '@ant-design/icons';
+import { BankOutlined, ContactsOutlined, DesktopOutlined, FileOutlined, FireOutlined, PieChartOutlined, TeamOutlined } from '@ant-design/icons';
 import './menu.component.css';
 import { Layout, Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -123,14 +123,13 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
                  List Council 
                 </Link>
               </Menu.Item>
-              <Menu.Item key="7">
+            </SubMenu>
+            }
+                <Menu.Item icon={<BankOutlined />} key="7">
                 <Link to="/council-review">
                  Council review
                 </Link>
               </Menu.Item>
-            </SubMenu>
-            }
-
             <Menu.Item key="9" icon={<ContactsOutlined />}>
               <Link to="/my-faculty">
               My Faculty
@@ -167,7 +166,7 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
              {this.state.isRole==='MANAGER' && <Route path="/list-lecturer" component={ListLecturer}></Route>}
              {this.state.isRole==='MANAGER' && <Route path="/topic-council" component={TopicCouncil}></Route>}
              {this.state.isRole==='MANAGER' && <Route path="/list-council" component={ListCouncil}></Route>}
-             {this.state.isRole==='MANAGER' && <Route path="/council-review" component={CouncilReview}></Route>}
+             <Route path="/council-review" component={CouncilReview}></Route>
           </Switch>
 
           </Content>
