@@ -23,7 +23,6 @@ export default class ListCouncil extends React.Component<IProps, MyState> {
   componentDidMount() {
     this.getListCouncil();
   }
-  dataSource: any;
 
   getListCouncil = () => {
     axios.get(`${environment.url}/council`,
@@ -36,7 +35,6 @@ export default class ListCouncil extends React.Component<IProps, MyState> {
         const dataSource: LIST_COUNCIL[] = res.data;
         this.setState({ ...this.state, data: dataSource })
         console.log(this.state.data)
-        return this.dataSource;
       })
       .catch(e => console.log(e))
   }

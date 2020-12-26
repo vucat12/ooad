@@ -16,10 +16,12 @@ import AssignTopic from '../assign-topic/assign-topic.component';
 import ListLecturer from '../list-lecturer/list-lecturer.component';
 import TopicCouncil from '../council/council.component';
 import ListCouncil from '../list-council/list-council.component';
+import CouncilReview from '../council-review/council-review.component';
 
 export interface SlideBars {
   isRole: any;
   collapsed: boolean,
+  userName: string,
 }
 interface IProps {
 }
@@ -36,6 +38,7 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
     this.state = {
       isRole: undefined,
       collapsed: false,
+      userName: ''
     }
   }
 
@@ -58,7 +61,7 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
       })
       .then(res => {
         if (res.status === 200) {
-          this.setState({ isRole: res.data.data.roleCode})
+          this.setState({ isRole: res.data.data.roleCode, userName: res.data.data.fullName})
         }
       }) 
   }
@@ -120,6 +123,11 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
                  List Council 
                 </Link>
               </Menu.Item>
+              <Menu.Item key="7">
+                <Link to="/council-review">
+                 Council review
+                </Link>
+              </Menu.Item>
             </SubMenu>
             }
 
@@ -146,7 +154,7 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
         </Sider>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} >
-            <HeaderInit/>
+            <HeaderInit userName={this.state.userName}/>
           </Header>
           <Content style={{ margin: '0 16px' }}>
           <Switch>
@@ -159,6 +167,7 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
              {this.state.isRole==='MANAGER' && <Route path="/list-lecturer" component={ListLecturer}></Route>}
              {this.state.isRole==='MANAGER' && <Route path="/topic-council" component={TopicCouncil}></Route>}
              {this.state.isRole==='MANAGER' && <Route path="/list-council" component={ListCouncil}></Route>}
+             {this.state.isRole==='MANAGER' && <Route path="/council-review" component={CouncilReview}></Route>}
           </Switch>
 
           </Content>

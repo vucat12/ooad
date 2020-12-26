@@ -11,11 +11,20 @@ export interface HomeContent {
 
 }
 
+interface IProps {
+  userName?: string;
+}
+
 // const getUser =[{
 //         name: 'Vu Cat'
 //     }]
 
-export class HomePage extends React.Component<HomeContent> {
+export class HomePage extends React.Component<IProps, HomeContent> {
+
+  removeStorage() {
+    localStorage.removeItem('KeyToken');
+  }
+
   render() {
     return (
       <Row style={{fontSize: '15px', fontWeight: 'bold', position: 'relative'}}>
@@ -31,9 +40,11 @@ export class HomePage extends React.Component<HomeContent> {
         <Col span={11} >
           <div  style={{float: 'right'}}>
             <div style={{display: "inline-block", padding: ' 0px 15px'}}>
-              <UserAddOutlined  style={{paddingRight: '10px'}} />
-              <Link to="/">
-                <span>Log out</span>
+              <div style={{display: 'inline-block', paddingRight: '15px'}}>
+              <UserAddOutlined  style={{paddingRight: '10px'}} /> {this.props.userName}
+              </div>
+              <Link to="/" onClick={this.removeStorage}>
+              <span>Log out</span>  
               </Link>
             </div>
           </div>

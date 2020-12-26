@@ -1,15 +1,18 @@
 
-import { Button, Card, Col, Row,Table } from 'antd';
+import { Button, Card, Col, Divider, Row,Table } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import axios from 'axios';
 import * as React from 'react';
 import { environment } from '../../environment/environment';
-import { CONTRACT, DETAIL_FACULTY, DETAIL_TOPIC_LECTURER, FACULTY, FIELD, LEVEL, TEAM } from '../../types/components/Topic';
+import { CONTRACT, DETAIL_FACULTY, DETAIL_TOPIC_LECTURER, FACULTY, FIELD, LECTURES, LEVEL, NameLecturer, TEAM, TEAM_TOPIC } from '../../types/components/Topic';
+import './list-council-detail.component.css';
 
 interface MyState {
-  data: DETAIL_TOPIC_LECTURER[];
+  data: TEAM_TOPIC[];
   team: TEAM[];
   display: boolean;
+  dataLectures: LECTURES[];
+  recordList: NameLecturer[];
 }
 interface IProps {
   id?: any,
@@ -21,6 +24,8 @@ export class ListCouncilDetail extends React.Component<IProps, MyState> {
       data: [],
       team: [],
       display: false,
+      dataLectures: [],
+      recordList: []
     };
   }
 
@@ -29,7 +34,7 @@ export class ListCouncilDetail extends React.Component<IProps, MyState> {
   }
   dataSource: any;
   getLecturerDetail = () => {
-    axios.get(`${environment.url}/faculty/lecturer/detail/${this.props.id}`,
+    axios.get(`${environment.url}/council/${this.props.id}`,
       {
         headers: {
           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
@@ -37,15 +42,15 @@ export class ListCouncilDetail extends React.Component<IProps, MyState> {
       })
       .then(res => {
 
-        const dataSource: DETAIL_TOPIC_LECTURER[] = res.data.listTopicRegister;
+        const dataLectures: LECTURES[] = res.data.members;
+        this.setState({ dataLectures: dataLectures})
+
+        const dataSource: TEAM_TOPIC[] = res.data.reviewList;
         dataSource.map((el: any) => {
-          el.topicId = el.topic.topicId;
-          el.nameTopic = el.topic.nameTopic;
-          el.year = el.topic.year;
-          el.nameFaculty = el.topic.faculty.nameFaculty;
+          el.key = el.teamId
         })
+      
         this.setState({ ...this.state, data: dataSource })
-        console.log(this.state.data)
         return this.dataSource;
       })
       .catch(e => console.log(e))
@@ -59,56 +64,64 @@ export class ListCouncilDetail extends React.Component<IProps, MyState> {
   columnsUser: any = [
     {
       title: "Id",
-      dataIndex: "topicId",
-      key: "topicId"
+      dataIndex: "lecturerId",
+      key: "lecturerId"
     },
     {
-      title: "Name Topic",
-      dataIndex: "nameTopic",
-      key: "nameTopic"
+      title: "Full Name",
+      dataIndex: "fullName",
+      key: "fullName"
     },
     {
-      title: "Year",
-      dataIndex: "year",
-      key: "year"
+      title: "Position",
+      dataIndex: "position",
+      key: "position"
+    },
+  ];
+
+  columnsDetail: any = [
+    {
+      title: "Name Lecturer",
+      dataIndex: "nameLecturer",
+      key: "nameLecturer"
+    },
+    {
+      title: "Position",
+      dataIndex: "position",
+      key: "position"
+    },
+    {
+      title: "Score",
+      dataIndex: "score",
+      key: "score"
+    },
+    {
+      title: "Comment",
+      dataIndex: "comment",
+      key: "comment"
     },
   ];
 
   columns: any = [
     {
-      title: "Id",
-      dataIndex: "topicId",
-      key: "topicId"
-    },
-    {
       title: "Name Topic",
       dataIndex: "nameTopic",
       key: "nameTopic"
     },
     {
+      title: "Level Name",
+      dataIndex: "levelName",
+      key: "levelName"
+    },
+    {
+      title: "Field Topic",
+      dataIndex: "fieldTopic",
+      key: "fieldTopic"
+    },
+    {
       title: "Year",
       dataIndex: "year",
       key: "year"
-    },
-    {
-      title: "Name Faculty",
-      dataIndex: "nameFaculty",
-      key: "nameFaculty"
-    },
-    {
-      title: "Date Register",
-      dataIndex: "dateRegister",
-      key: "dateRegister"
-    },
-    {
-      title: "Date Approve",
-      dataIndex: "dateApprove",
-      key: "dateApprove"
-    },
-    {
-      title: "Finish",
-      key: "finish",
-      dataIndex: "finish"
     },
     {
       title: "Result",
@@ -132,15 +145,24 @@ export class ListCouncilDetail extends React.Component<IProps, MyState> {
 
       <Table 
         columns={this.columnsUser} 
-        dataSource={this.state.data}
+        dataSource={this.state.dataLectures}
         pagination={false}
         style={{width: '35%'}}
       />
-
+  <hr style={{
+    margin: '16px 0'
+  }}/>
         <Table 
         columns={this.columns} 
         dataSource={this.state.data}
         pagination={false}
+        expandable={  {expandedRowRender: record => 
+          <Table
+            className="style"
+            columns={this.columnsDetail}
+            dataSource={record.recordList}
+             pagination={false} />
+        } }
         />
       </div>
     </div>

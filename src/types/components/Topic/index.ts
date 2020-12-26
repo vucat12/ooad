@@ -50,6 +50,10 @@ export type CONTRACT = {
 export type NameLecturer = {
     lecturerId: number,
     username: string,
+    position: string,
+    nameLecturer: string,
+    score: string,
+    comment: string
 }
 
 export type MYTOPIC = {
@@ -103,3 +107,27 @@ export type LIST_COUNCIL = {
     presidentOfCouncil: string,
     totalRegister: number
 }
+
+export type TEAM_TOPIC = {
+    key: number,
+    teamId: number,
+    nameTopic: string,
+    levelName: string,
+    fieldTopic: string,
+    year: number,
+    result: string,
+    recordList: NameLecturer[],
+}
+
+export type COUNCIL_REVIEW = {
+    id: number,
+    councilId: number,
+    topicId: number,
+    teamId: number,
+    nameTopic: string,
+    facultyName: string,
+    levelName: string,
+    fieldTopic: string,
+    score: string,
+}
+
