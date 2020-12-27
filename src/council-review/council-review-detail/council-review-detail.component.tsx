@@ -4,10 +4,8 @@ import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
 import axios from 'axios';
 import * as React from 'react';
-import { Link, Route } from 'react-router-dom';
 import { environment } from '../../environment/environment';
 import { NameLecturer, TEAM } from '../../types/components/Topic';
-import CouncilReview from '../council-review.component';
 
 interface MyState {
   data: NameLecturer[];
@@ -101,10 +99,13 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
 ...this.props.listId
     }
 this.postScoreComment(init)
+
+
     this.setState({ display: false })
   }
 
   onCancel = () => {
+    
     this.setState({ display: false});
   }
 

@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Form, Input, Modal, Popover, Row, Select, Space, Steps, Table } from 'antd';
+import { Button, Card, Col, Form, Input, InputNumber, Modal, Popover, Row, Select, Space, Steps, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -288,7 +288,7 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
           },
         ]}
         label="Phone">
-        <Input />
+        <InputNumber  min={9} max={10} />
         </Form.Item>
       </Col>
     </Row>

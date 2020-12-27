@@ -299,7 +299,7 @@ export default class Topic extends React.Component<IProps, MyState> {
       key: 'action',
       render: (text: any, record: any) => (
         <Space size="middle">
-          <Button onClick={() => this.showModal(record)}>Register</Button>
+          <Button onClick={() => this.showModal(record)} disabled={record.status == 'DELETED' ? true : false}>Register</Button>
         </Space>
       ),
     },

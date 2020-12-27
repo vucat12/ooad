@@ -184,8 +184,6 @@ export default class MyTopic extends React.Component<IProps, MyState> {
           result: res.data.result,
         }
         
-          console.log("Detail===================", this.topicDetail)
-
         this.stepList = {
           start: res.data.start,
           facultyReview: res.data.facultyReview,
@@ -234,14 +232,19 @@ export default class MyTopic extends React.Component<IProps, MyState> {
       dataIndex: "year"
     },
     {
-      title: "Description",
-      key: "description",
-      dataIndex: "description"
-    },
-    {
       title: "Status",
       key: "status",
       dataIndex: "status"
+    },
+    {
+      title: "Result",
+      key: "result",
+      dataIndex: "result"
+    },
+    {
+      title: "Finish",
+      key: "finish",
+      dataIndex: "finish"
     },
     {
       title: 'Action',
