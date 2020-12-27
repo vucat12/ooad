@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { Form, Input, Button, Checkbox, Divider, Row, Col } from 'antd';
+import { Form, Input, Button, Divider, Row, Col, message } from 'antd';
 import axios from 'axios';
 import './log-in.component.css';
 import { environment } from '../environment/environment'
@@ -30,14 +30,17 @@ const onFinish = (values: any) => {
       data: postLogin,
       headers: {'Content-Type': 'application/json' }
       })
+      
       .then(res => {
         if (res.status === 200) {
           window.localStorage.setItem("KeyToken", res.data.accessToken);
+          message.success({content: 'Success'})
           window.location.href="/home-overview"
         }
-     
       }) 
-      .catch(error => alert("Wrong") )
+      .catch(error => {
+        message.error({content: error.response.data?.message})
+      })
 };
 
 

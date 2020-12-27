@@ -26,6 +26,7 @@ export interface SlideBars {
   isRole: any;
   collapsed: boolean,
   userName: string,
+  facultyName: string,
 }
 interface IProps {
 }
@@ -42,7 +43,8 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
     this.state = {
       isRole: undefined,
       collapsed: false,
-      userName: ''
+      userName: '',
+      facultyName: ''
     }
   }
 
@@ -65,7 +67,7 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
       })
       .then(res => {
         if (res.status === 200) {
-          this.setState({ isRole: res.data.data.roleCode, userName: res.data.data.fullName})
+          this.setState({ isRole: res.data.data.roleCode, userName: res.data.data.fullName, facultyName: res.data.data.facultyName})
         }
       }) 
   }
@@ -87,7 +89,12 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
   return (
     <Layout style={{ minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-          <div className="logo" />
+          <div style={{color: 'white',
+           textAlign: 'center',
+           fontSize: '25px', 
+          padding: '10px 0',
+          letterSpacing: '2px',
+          }}>OOAD</div>
           <Menu theme="dark" mode="inline" onClick={(item) => this.getItems(item)} >
             <Menu.Item key="1" icon={<PieChartOutlined/>} >
               <Link to="/home-overview">
@@ -114,8 +121,6 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
               </Menu.Item>
             </SubMenu>
             }
-
-
             <SubMenu key="sub2" icon={<FireOutlined />} title="Council">
               {this.state.isRole == 'MANAGER' &&
               <Menu.Item key="5">
@@ -188,7 +193,7 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
         </Sider>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} >
-            <HeaderInit userName={this.state.userName}/>
+            <HeaderInit userName={this.state.userName} facultyName={this.state.facultyName} isRole={this.state.isRole}/>
           </Header>
           <Content style={{ margin: '0 16px' }}>
           <Switch>

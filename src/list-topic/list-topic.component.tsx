@@ -1,5 +1,5 @@
 
-import { Breadcrumb, Button, Dropdown, Input, Menu, Modal, Popconfirm, Popover, Select, Space, Table } from 'antd';
+import { Breadcrumb, Button, Dropdown, Input, Menu, message, Modal, Popconfirm, Popover, Select, Space, Table, Tag } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -208,9 +208,10 @@ export default class ListTopic extends React.Component<IProps, MyState> {
       .then(res => {
         if (res.status === 200) {
           this.getTopic();
+          message.success({content: 'Success'})
         }
       })
-      .catch(error => alert("Wrong"))
+      .catch(error => message.error({content: error.response.data.message}))
   }
 
   getStatusField = (e: any) => {
@@ -247,7 +248,21 @@ export default class ListTopic extends React.Component<IProps, MyState> {
     {
       title: "Status",
       key: "status",
-      dataIndex: "status"
+      dataIndex: "status",
+      render: (status: any) => (
+        <span>
+        {status == 'ACTIVE' &&    <Tag color={'green'} key={status}>
+                  {status}
+                </Tag>
+        }   
+
+        {status == 'DELETED' &&    <Tag color={'volcano'} key={status}>
+                  {status}
+                </Tag>
+        }   
+
+        </span>
+      ),
     },
     {
       title: "Last Updated",
@@ -288,8 +303,8 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   render() {
     return (
       <div>
-        <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
-          <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
+        <Breadcrumb style={{ margin: '16px 15px', fontSize: '20px' }}>
+        <div style={{display: 'inline-block', fontWeight: 600}}>List Topic Of Faculty</div>
           <div style={{ display: 'inline-block', float: 'right' }}>
             <div style={{display: 'inline-block'}}>
             <ListTopicEdit text="Add" topicDetail={this.state.topicDetail}/>

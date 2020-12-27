@@ -1,5 +1,5 @@
 
-import { Breadcrumb, Button, Form, Input, Select, Space, Table } from 'antd';
+import { Breadcrumb, Button, Form, Input, message, Select, Space, Table, Tag } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -29,7 +29,6 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
 
   componentDidMount() {
     this.getTopic();
-    this.getListUser();
   }
   dataSource: any;
   getTopic = () => {
@@ -52,8 +51,8 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
       .catch(e => console.log(e))
   }
 
-  getListUser = () => {
-    axios.get(`${environment.url}/user`,
+  getListUser = (id: any) => {
+    axios.get(`${environment.url}/lecturer/find-create-council/${id}`,
     {
       headers: {
         Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
@@ -80,13 +79,14 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
       })
       .then(res => {
           if (res.status === 200) {
-              alert("Ok")
+              message.success({ content: 'Success'})
           }
       }) 
-      .catch(error => alert("Wrong") )
+      .catch(error => message.error({content: error.response.data.message}) )
   }
 
   showModal = (record: any) => {
+    this.getListUser(record.topicId)
     this.setState({ visible: true, topicId: record.topicId })
   }
 
@@ -148,7 +148,21 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
     {
       title: "Status",
       key: "status",
-      dataIndex: "status"
+      dataIndex: "status",
+      render: (status: any) => (
+        <span>
+        {status == 'COMPLETED' &&    <Tag color={'green'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }   
+
+        {status == 'NOT COMPLETED' &&    <Tag color={'volcano'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }   
+
+        </span>
+      ),
     },{
       title: 'Action',
       key: 'action',
@@ -173,9 +187,9 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
     };
     return (
       <div>
-        <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
-          <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
-        </Breadcrumb>
+       <Breadcrumb style={{ margin: '16px 15px', fontSize: '20px' }}>
+          <div style={{display: 'inline-block', fontWeight: 600}}>List Topic Need To Create New Council</div>
+      </Breadcrumb>        
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table 
           columns={this.columns} 
@@ -211,7 +225,7 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
         </div>
         <Modal
           visible={this.state.visible}
-          title="Register Topic"
+          title="Create New Council"
           footer={null}
           width="36%"
           onCancel={this.onCancel}
@@ -341,7 +355,7 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
                 <Button type="primary" htmlType="submit">
                   Submit
                 </Button>
-                <Button type="ghost" onClick={this.onCancel}>
+                <Button style={{marginLeft: 5}}  type="ghost" onClick={this.onCancel}>
                   Cancel
                 </Button>
                 </div>

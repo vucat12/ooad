@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Row,Table, Tabs } from 'antd';
+import { Button, Card, Col, Row,Table, Tabs, Tag } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import axios from 'axios';
 import * as React from 'react';
@@ -91,7 +91,21 @@ export class FacultyManagementDetail extends React.Component<IProps, MyState> {
     {
       title: "Status",
       key: "status",
-      dataIndex: "status"
+      dataIndex: "status",
+      render: (status: any) => (
+        <span>
+        {status == 'ACTIVE' &&    <Tag color={'green'} key={status}>
+                  {status}
+                </Tag>
+        }   
+
+        {status == 'DELETED' &&    <Tag color={'volcano'} key={status}>
+                  {status}
+                </Tag>
+        }   
+
+        </span>
+      ),
     },
     {
       title: "Last Updated",
@@ -117,11 +131,6 @@ export class FacultyManagementDetail extends React.Component<IProps, MyState> {
       key: "faculty"
     },
     {
-      title: "Day of birth",
-      dataIndex: "dob",
-      key: "dob"
-    },
-    {
       title: "Major",
       key: "major",
       dataIndex: "major"
@@ -140,7 +149,7 @@ const { TabPane } = Tabs;
         <Button onClick={this.showModalEdit}>Detail </Button>
         <Modal
           visible={this.state.display}
-          title="Add Topic"
+          title="Faculty"
           width="1200px"
           onCancel={() => this.setState({ display: false })}
           footer={null}>
@@ -148,7 +157,7 @@ const { TabPane } = Tabs;
 <Tabs defaultActiveKey="1">
     <TabPane tab="List Lecturer" key="1">
     <div style={{overflow: 'hidden', margin: '0 15px' }}>
-    <div className="site-layout-background" style={{ padding: 24, minHeight: 360}}>
+    <div className="site-layout-background" style={{ padding: 10, minHeight: 360}}>
         <Table 
         columns={this.columnsLecturer} 
         dataSource={this.state.data}
@@ -158,7 +167,7 @@ const { TabPane } = Tabs;
     </TabPane>
     <TabPane tab="List Topic" key="2">
     <div style={{overflow: 'hidden', margin: '0 15px' }}>
-    <div className="site-layout-background" style={{ padding: 24, minHeight: 360}}>
+    <div className="site-layout-background" style={{ padding: 10, minHeight: 360}}>
         <Table 
         columns={this.columnsTopic} 
         dataSource={this.state.topic}

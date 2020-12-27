@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Input, Modal, Popover, Row, Space, Steps, Table } from 'antd';
+import { Breadcrumb, Button, Card, Col, Input, message, Modal, Popover, Row, Space, Steps, Table, Tag } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -130,11 +130,11 @@ export default class MyTopic extends React.Component<IProps, MyState> {
         })
         .then(res => {
           if (res.status === 200) {
-              window.alert("OK")
+              message.success({content: 'Success'})
               this.getTopic();
           }
         }) 
-        .catch(error => alert("Wrong") )
+        .catch(error => message.error({content: error.response.data.message}) )
     this.setState({ visible: false});
   }
 
@@ -153,11 +153,11 @@ export default class MyTopic extends React.Component<IProps, MyState> {
         })
         .then(res => {
           if (res.status === 200) {
-              window.alert("OK")
+              message.success({content: 'Success'})
               this.getTopic();
           }
         }) 
-        .catch(error => alert("Wrong") )
+        .catch(error => message.error({content: error.response.data.message}) )
     this.setState({ visible: false});
   }
 
@@ -234,17 +234,73 @@ export default class MyTopic extends React.Component<IProps, MyState> {
     {
       title: "Status",
       key: "status",
-      dataIndex: "status"
+      dataIndex: "status",
+      render: (status: any) => (
+        <span>
+        {status == 'Completed' &&    <Tag color={'green'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }   
+
+        {status == 'University Review' &&    <Tag color={'geekblue'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }  
+
+        {status == 'Faculty Review' &&    <Tag color={'geekblue'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }   
+
+          {status == 'Decline' &&    <Tag color={'volcano'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }   
+        </span>
+      ),
     },
     {
       title: "Result",
       key: "result",
-      dataIndex: "result"
+      dataIndex: "result",
+      render: (result: any) => (
+        <span>
+        {result == 'NOT YET RATE' &&    <Tag color={'geekblue'} key={result}>
+                  {result}
+                </Tag>
+        }   
+
+        {result == 'FAIL' &&    <Tag color={'volcano'} key={result}>
+                  {result}
+                </Tag>
+        }  
+
+        {result == 'PASS' &&    <Tag color={'green'} key={result}>
+                  {result}
+                </Tag>
+        }   
+        </span>
+      ),
     },
     {
       title: "Finish",
       key: "finish",
-      dataIndex: "finish"
+      dataIndex: "finish",
+      render: (result: any) => (
+        <span>
+        {result == 'NOT COMPLETED' &&    <Tag color={'volcano'} key={result}>
+                  {result}
+                </Tag>
+        }   
+
+        {result == 'COMPLETED' &&    <Tag color={'green'} key={result}>
+                  {result}
+                </Tag>
+        }  
+
+    
+        </span>
+      ),
     },
     {
       title: 'Action',
@@ -264,7 +320,7 @@ export default class MyTopic extends React.Component<IProps, MyState> {
       <div>
         <Modal
           visible={this.state.visible}
-          title="Add Topic"
+          title="Detail Register Topic"
           width="1200px"
           onCancel={this.onCancel}
           footer={[
@@ -390,7 +446,11 @@ export default class MyTopic extends React.Component<IProps, MyState> {
                         <span><strong>Finish </strong> </span>
                       </Col>
                       <Col span={5}>
-                      {this.topicDetail.finish}
+                      {this.topicDetail.finish == 'COMPLETED' ?  <Tag color={'green'} key={this.topicDetail.finish}>
+                  {this.topicDetail.finish}
+                </Tag> : <Tag color={'volcano'} key={this.topicDetail.finish}>
+                  {this.topicDetail.finish}
+                </Tag>}
                       </Col>
                     </Row>
                     <Row gutter={[8, 8]}>
@@ -404,7 +464,9 @@ export default class MyTopic extends React.Component<IProps, MyState> {
                         <span><strong>Result </strong> </span>
                       </Col>
                       <Col span={5}>
-                      {this.topicDetail.result}
+                      {this.topicDetail.result == 'FAIL' &&  <Tag color={'volcano'} key={this.topicDetail.result}>{this.topicDetail.result}</Tag>}
+                      {this.topicDetail.result == 'NOT YET RATE' &&  <Tag color={'geekblue'} key={this.topicDetail.result}>{this.topicDetail.result}</Tag>}
+                      {this.topicDetail.result == 'PASS' &&  <Tag color={'green'} key={this.topicDetail.result}>{this.topicDetail.result}</Tag>}
                       </Col>
                     </Row>
                     <Row gutter={[8, 8]}>
@@ -444,8 +506,10 @@ export default class MyTopic extends React.Component<IProps, MyState> {
           </div>
         </Modal>
 
-        <div style={{ margin: '40px' }}>
-          <div style={{ float: 'right', margin: '10px 40px 30px 0' }}>
+        <div>
+        <Breadcrumb style={{ margin: '16px 15px', fontSize: '20px' }}>
+          <div style={{display: 'inline-block', fontWeight: 600}}>My Topic Was Registered</div>
+          <div style={{ display: 'inline-block', float: 'right' }}>
             <Popover content={<div>
               <div>
                 <span style={{ display: 'inline-block', width: '25%' }}>Keyword </span>
@@ -458,6 +522,7 @@ export default class MyTopic extends React.Component<IProps, MyState> {
               <Button>Search</Button>
             </Popover>
           </div>
+          </Breadcrumb>
         </div>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table

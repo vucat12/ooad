@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Divider, Row,Table } from 'antd';
+import { Button, Card, Col, Divider, Row,Table, Tag } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import axios from 'axios';
 import * as React from 'react';
@@ -132,7 +132,25 @@ export class CouncilMangementDetail extends React.Component<IProps, MyState> {
     {
       title: "Result",
       dataIndex: "result",
-      key: "result"
+      key: "result",
+      render: (result: any) => (
+        <span>
+        {result == 'NOT RATE' &&    <Tag color={'geekblue'} key={result}>
+                  {result}
+                </Tag>
+        }   
+
+        {result == 'FAIL' &&    <Tag color={'volcano'} key={result}>
+                  {result}
+                </Tag>
+        }  
+
+        {result == 'PASS' &&    <Tag color={'green'} key={result}>
+                  {result}
+                </Tag>
+        }   
+        </span>
+      ),
     },
   ];
   render() {
@@ -142,13 +160,13 @@ export class CouncilMangementDetail extends React.Component<IProps, MyState> {
         <Button onClick={this.showModalEdit}>Detail </Button>
         <Modal
           visible={this.state.display}
-          title="Add Topic"
+          title="Council Detail"
           width="1200px"
           onCancel={() => this.setState({ display: false })}
           footer={null}>
       <div style={{overflow: 'hidden', margin: '0 15px' }}>
-      <div className="site-layout-background" style={{ padding: 24, minHeight: 360}}>
-
+      <div className="site-layout-background" style={{ padding: '0 10px', minHeight: 360}}>
+      <div style={{ color: '#00000073', fontWeight: 'bold', fontSize: '15px', paddingBottom: '8px'}}>Council Member</div>
       <Table 
         columns={this.columnsUser} 
         dataSource={this.state.dataLectures}
@@ -158,16 +176,16 @@ export class CouncilMangementDetail extends React.Component<IProps, MyState> {
   <hr style={{
     margin: '16px 0'
   }}/>
+      <div style={{ color: '#00000073', fontWeight: 'bold', fontSize: '15px', paddingBottom: '8px'}}>Council Topic Review</div>
         <Table 
         columns={this.columns} 
         dataSource={this.state.data}
-        pagination={false}
         expandable={  {expandedRowRender: record => 
           <Table
             className="style"
             columns={this.columnsDetail}
             dataSource={record.recordList}
-             pagination={false} />
+            />
         } }
         />
       </div>

@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Input, Modal, Popover, Row, Space, Steps, Table } from 'antd';
+import { Breadcrumb, Button, Card, Col, Input, Modal, Popover, Row, Space, Steps, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -77,11 +77,6 @@ export default class ListLecturer extends React.Component<IProps, MyState> {
       key: "faculty"
     },
     {
-      title: "Day of birth",
-      dataIndex: "dob",
-      key: "dob"
-    },
-    {
       title: "Major",
       key: "major",
       dataIndex: "major"
@@ -106,8 +101,9 @@ export default class ListLecturer extends React.Component<IProps, MyState> {
   render() {
     return (
       <div>
-        <div style={{ margin: '40px' }}>
-          <div style={{ float: 'right', margin: '10px 40px 30px 0' }}>
+        <Breadcrumb style={{ margin: '16px 15px', fontSize: '20px' }}>
+          <div style={{display: 'inline-block', fontWeight: 600}}>List Lecturer Of Faculty</div>
+          <div style={{ display: 'inline-block', float: 'right' }}>
             <Popover content={<div>
               <div>
                 <span style={{ display: 'inline-block', width: '25%' }}>Keyword </span>
@@ -120,7 +116,7 @@ export default class ListLecturer extends React.Component<IProps, MyState> {
               <Button>Search</Button>
             </Popover>
           </div>
-        </div>
+        </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table
             columns={this.columns}

@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Form, Input, Row,Table } from 'antd';
+import { Button, Card, Col, Form, Input, message, Row,Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Modal from 'antd/lib/modal/Modal';
 import axios from 'axios';
@@ -83,8 +83,9 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
         data: value
       })
       .then(res => {
+        message.success({content: 'Success'})
       }) 
-      .catch(error => alert("Wrong") )
+      .catch(error => message.error({content: error.response.data.message}) )
   this.setState({ display: false});
   }
 
@@ -95,17 +96,18 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
 
   onFinish = (values: any) => {
     let init = {
-...values,
-...this.props.listId
-    }
-this.postScoreComment(init)
-
+    ...values,
+    ...this.props.listId
+        }
+    this.postScoreComment(init)
 
     this.setState({ display: false })
+    window.location.href = '/council-review'
+
   }
 
   onCancel = () => {
-    
+
     this.setState({ display: false});
   }
 
@@ -140,28 +142,28 @@ this.postScoreComment(init)
         <Button onClick={this.showModalEdit}>Detail </Button>
         <Modal
           visible={this.state.display}
-          title="Add Topic"
+          title="Topic Review"
           width="1200px"
           onCancel={this.onCancel}
           footer={null}>
       <div style={{overflow: 'hidden', margin: '0 15px' }}>
-      <div className="site-layout-background" style={{ padding: 24, minHeight: 360}}>
+      <div className="site-layout-background" style={{ padding: 16, minHeight: 360}}>
         <Row>
           <Col span={12}>
-          <Card title="Default size card" style={{ width: 500 }}>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Full Name:</div>  {this.topic.fullName}</div></p>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Update at:</div >  {this.topic.updatedAt}</div></p>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}> Topic Id:</div> {this.topic.topicId}</div></p>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Name Topic:</div>  {this.topic.nameTopic}</div></p>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Year:</div>  {this.topic.year}</div></p>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Description:</div>  {this.topic.description}</div></p>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Name Faculty: </div> {this.topic.nameFaculty}</div></p>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Name Level: </div> {this.topic.nameLevel}</div></p>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}>Field Name:</div>  {this.topic.fieldName}</div></p>
-            <p><div> <div style={{width: '150px', display: 'inline-block'}}> Status:</div> {this.topic.status}</div></p>
+          <Card  title="Default size card" style={{ width: 500, backgroundColor: '#fdfaf7' }}  type="inner">
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Full Name:</div>  {this.topic.fullName}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Update at:</div >  {this.topic.updatedAt}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}> Topic Id:</div> {this.topic.topicId}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Name Topic:</div>  {this.topic.nameTopic}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Year:</div>  {this.topic.year}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Description:</div>  {this.topic.description}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Name Faculty: </div> {this.topic.nameFaculty}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Name Level: </div> {this.topic.nameLevel}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Field Name:</div>  {this.topic.fieldName}</div></p>
+            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}> Status:</div> {this.topic.status}</div></p>
           </Card>
           </Col>
-          <Col span={12}>
+          <Col span={12} >
               <Table 
               columns={this.columns} 
               dataSource={this.state.data}

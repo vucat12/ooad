@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Row,Table } from 'antd';
+import { Button, Card, Col, Row,Table, Tag } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import axios from 'axios';
 import * as React from 'react';
@@ -129,12 +129,43 @@ export class LecturerManagementDetail extends React.Component<IProps, MyState> {
     {
       title: "Finish",
       key: "finish",
-      dataIndex: "finish"
+      dataIndex: "finish",
+      render: (finish: any) => (
+        <span>
+        {finish == 'COMPLETED' &&    <Tag color={'green'} key={finish}>
+                  {finish}
+                </Tag>
+        }   
+
+        {finish == 'NOT COMPLETED' &&    <Tag color={'volcano'} key={finish}>
+                  {finish}
+                </Tag>
+        }  
+        </span>
+      ),
     },
     {
       title: "Result",
       dataIndex: "result",
-      key: "result"
+      key: "result",
+      render: (result: any) => (
+        <span>
+        {result == 'NOT YET RATE' &&    <Tag color={'geekblue'} key={result}>
+                  {result}
+                </Tag>
+        }   
+
+        {result == 'FAIL' &&    <Tag color={'volcano'} key={result}>
+                  {result}
+                </Tag>
+        }  
+
+        {result == 'PASS' &&    <Tag color={'green'} key={result}>
+                  {result}
+                </Tag>
+        }   
+        </span>
+      ),
     },
   ];
   render() {
@@ -144,16 +175,15 @@ export class LecturerManagementDetail extends React.Component<IProps, MyState> {
         <Button onClick={this.showModalEdit}>Detail </Button>
         <Modal
           visible={this.state.display}
-          title="Add Topic"
+          title="Information Lecturer"
           width="1200px"
           onCancel={() => this.setState({ display: false })}
           footer={null}>
       <div style={{overflow: 'hidden', margin: '0 15px' }}>
       <div style={{background: 'white',
-                   margin: '4% 1.5%',
-                   padding: '2%',
+                   padding: '0 2%',
                     }}>
-
+<div style={{ color: '#00000073', fontWeight: 'bold', fontSize: '15px', paddingBottom: '8px'}}>Infomation</div>
           <Card style={{ width: "100%" }}>
               <Row>
                 <Col span={3}>
@@ -170,29 +200,17 @@ export class LecturerManagementDetail extends React.Component<IProps, MyState> {
                 </Col>
               </Row>
               <Row>
-                <Col span={3}> <span> <strong>Day of birth</strong></span>
+                 <Col span={3}> <span> <strong>Major</strong>  </span>
                 </Col>
                 <Col span={9}>
-                 {this.lecturer.dob}
-                 </Col>
+                 {this.lecturer.major}</Col>
                 <Col span={3}> <span> <strong>Email</strong> </span>
                 </Col>
                 <Col span={9}>
                  {this.lecturer.email}
                 </Col>
               </Row>
-              <Row>
-                <Col span={3}>
-                   <span> <strong>Phone</strong> </span>
-                </Col>
-                <Col span={9}>
-                    {this.lecturer.phone}
-                </Col>
-                <Col span={3}> <span> <strong>Major</strong>  </span>
-                </Col>
-                <Col span={9}>
-                 {this.lecturer.major}</Col>
-              </Row>
+             
               <Row>
                 <Col span={3}> <span> <strong>Degree</strong>  </span>
                 </Col>
@@ -216,11 +234,15 @@ export class LecturerManagementDetail extends React.Component<IProps, MyState> {
           </Card>
 
       </div>
-      <div className="site-layout-background" style={{ padding: 24, minHeight: 360}}>
+
+      <hr style={{
+    margin: '32px 0 5px 0',
+  }}/>
+  <div className="site-layout-background" style={{ padding: 24, minHeight: 360}}>
+  <div style={{ color: '#00000073', fontWeight: 'bold', fontSize: '15px', paddingBottom: '8px'}}>List Topic Lecturer Register</div>
         <Table 
         columns={this.columns} 
         dataSource={this.state.data}
-        pagination={false}
         />
       </div>
     </div>

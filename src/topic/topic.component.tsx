@@ -1,5 +1,5 @@
 
-import { Breadcrumb, Button, Dropdown, Form, Input, Menu, Modal, Popover, Select, Space, Table } from 'antd';
+import { Breadcrumb, Button, Dropdown, Form, Input, Menu, message, Modal, Popover, Select, Space, Table, Tag } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -15,6 +15,7 @@ interface MyState {
   filed: FIELD[];
   visible: boolean;
   userDetail: NameLecturer[];
+  checkDisabled: boolean;
 }
 interface IProps {
 }
@@ -28,16 +29,17 @@ export default class Topic extends React.Component<IProps, MyState> {
       level: [],
       filed: [],
       visible: false,
-      userDetail: []
+      userDetail: [],
+      checkDisabled: false,
     };
   }
 
   componentDidMount() {
     this.getTopic();
+    this.checkDisabled();
     this.getListFaculty()
     this.getListLevel();
     this.getListField();
-    this.getListUser(undefined);
   }
   dataSource: any;
   filter = {
@@ -77,6 +79,8 @@ export default class Topic extends React.Component<IProps, MyState> {
         console.error(error);
       });
   }
+
+  
 
   getListField = () => {
     axios.get(`${environment.url}/field/all`,
@@ -177,7 +181,7 @@ export default class Topic extends React.Component<IProps, MyState> {
 
   showModal = (value: any) => {
     this.topicId = value.topicId;
-    console.log(this.topicId)
+    this.getListUser(this.topicId);
     this.setState({ visible: true });
   }
 
@@ -210,8 +214,8 @@ export default class Topic extends React.Component<IProps, MyState> {
     this.setState({ visible: false })
   }
 
-  getListUser = (name: any) => {
-    axios.get(`${environment.url}/user`,
+  getListUser = (id: any) => {
+    axios.get(`${environment.url}/lecturer/find-register/${id}`,
     {
       headers: {
         Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
@@ -239,10 +243,10 @@ export default class Topic extends React.Component<IProps, MyState> {
       })
       .then(res => {
           if (res.status === 200) {
-              alert("Ok")
+              message.success({content: 'Success'})
           }
       }) 
-      .catch(error => alert("Wrong") )
+      .catch(error =>  message.error({content: error.response.data.message}) )
   }
 
   handleYear = (e: any) => {
@@ -251,6 +255,21 @@ export default class Topic extends React.Component<IProps, MyState> {
 
   getStatusField = (e: any) => {
     this.filter.deleted = e;
+  }
+
+  checkDisabled = () => {
+    axios.get(`${environment.url}/user/check-register`,
+    {
+      headers: {
+        Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+      }
+    })
+    .then(res => {
+      this.setState({ checkDisabled: res.data})
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   columns: any = [
@@ -287,7 +306,21 @@ export default class Topic extends React.Component<IProps, MyState> {
     {
       title: "Status",
       key: "status",
-      dataIndex: "status"
+      dataIndex: "status",
+      render: (status: any) => (
+        <span>
+        {status == 'ACTIVE' &&    <Tag color={'green'} key={status}>
+                  {status}
+                </Tag>
+        }   
+
+        {status == 'DELETED' &&    <Tag color={'volcano'} key={status}>
+                  {status}
+                </Tag>
+        }   
+
+        </span>
+      ),
     },
     {
       title: "Last Updated",
@@ -299,7 +332,7 @@ export default class Topic extends React.Component<IProps, MyState> {
       key: 'action',
       render: (text: any, record: any) => (
         <Space size="middle">
-          <Button onClick={() => this.showModal(record)} disabled={record.status == 'DELETED' ? true : false}>Register</Button>
+          <Button onClick={() => this.showModal(record)} disabled={this.state.checkDisabled == true ?true:(record.status == 'DELETED' ? true : false)  }>Register</Button>
         </Space>
       ),
     },
@@ -308,8 +341,8 @@ export default class Topic extends React.Component<IProps, MyState> {
   render() {
     return (
       <div>
-        <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
-          <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
+        <Breadcrumb style={{ margin: '16px 15px', fontSize: '20px' }}>
+          <div style={{display: 'inline-block', fontWeight: 600}}>All Topic Present</div>
           <div style={{ display: 'inline-block', float: 'right' }}>
             <Popover content={<div>
       <div>

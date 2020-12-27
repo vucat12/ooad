@@ -1,5 +1,5 @@
 
-import { Button, DatePicker, Form, Input, InputNumber, Modal, Select, TimePicker } from 'antd';
+import { Button, DatePicker, Form, Input, InputNumber, message, Modal, Select, TimePicker } from 'antd';
 import axios from 'axios';
 import * as React from 'react';
 import { environment } from '../../environment/environment';
@@ -100,11 +100,11 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
     })
       .then(res => {
         if (res.status === 200) {
-          alert("Ok")
+          message.success({content: 'Success'})
           window.location.href = "/list-topic"
         }
       })
-      .catch(error => alert("Wrong"))
+      .catch(error => message.error({content: error.response.data.message}))
   }
 
   editTopic = (value: any) => {
@@ -118,11 +118,11 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
     })
       .then(res => {
         if (res.status === 200) {
-          alert("Ok")
+          message.success({content: 'Success'})
           window.location.href = "/list-topic"
         }
       })
-      .catch(error => alert("Wrong"))
+      .catch(error => message.error({content: error.response.data.message}))
   }
 
   onReset = () => {
@@ -180,7 +180,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
         <Button onClick={this.showModalEdit}>{!this.props.text ? "Edit" : this.props.text} </Button>
         <Modal
           visible={this.state.display}
-          title="Add Topic"
+          title="Edit Topic"
           onCancel={() => this.setState({ display: false })}
           footer={null}>
           <Form

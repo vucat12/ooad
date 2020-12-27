@@ -169,11 +169,6 @@ export default class MyFaculty extends React.Component<IProps, MyState> {
       key: "lecturerId"
     },
     {
-      title: "Day of birth",
-      dataIndex: "dob",
-      key: "dob"
-    },
-    {
       title: "Full Name",
       dataIndex: "fullName",
       key: "fullName"
@@ -182,11 +177,6 @@ export default class MyFaculty extends React.Component<IProps, MyState> {
       title: "Email",
       dataIndex: "email",
       key: "email"
-    },
-    {
-      title: "Phone",
-      key: "phone",
-      dataIndex: "phone"
     },
     {
       title: "Contract",
@@ -218,86 +208,13 @@ export default class MyFaculty extends React.Component<IProps, MyState> {
                      margin: '4% 1.5%',
                      padding: '2%',
                       }}>
-          <Descriptions title="Detail Faculty">
+          <Descriptions title="INFOMATION FACULTY">
             <Descriptions.Item label={<label style={{ fontWeight: 'bold' }}>Name of Faculty</label>}>{this.info.nameFaculty}</Descriptions.Item>
             <Descriptions.Item label={<label style={{ fontWeight: 'bold' }}>Name of University</label>}>{this.info.nameUniversity}</Descriptions.Item>
           <br/>
             <Descriptions.Item label={<label style={{ fontWeight: 'bold' }}>Total Topic</label>}>{this.info.totalTopic}</Descriptions.Item>
             <Descriptions.Item label={<label style={{ fontWeight: 'bold' }}>Total Lecturer</label>}>{this.info.totalLecturer}</Descriptions.Item>
           </Descriptions>
-        </div>
-        <div>
-          <div style={{ float: 'right', margin: '10px 40px 30px 0' }}>
-            <Popover content={<div>
-      <div>
-        <span style={{display: 'inline-block', width: '25%'}}>Keyword </span>
-        <Input style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }} onChange={this.handleChange} />
-      </div>
-      <div style={{marginTop: '5%'}}>
-      <span style={{width: '25%', display: 'inline-block'}}>Contract</span>
-        <Select
-              allowClear
-              style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
-              onChange={this.getValueContract}
-            >
-              {this.state.contract.length > 0
-                ? this.state.contract.map((dataInformation: CONTRACT) => (
-                  <Select.Option
-                    value={dataInformation.contractId}
-                    key={dataInformation.nameContract}
-                  >
-                    {dataInformation.nameContract}
-                  </Select.Option>
-                ))
-                : null}
-            </Select>
-      </div>
-      <div style={{marginTop: '5%'}}>
-      <span style={{width: '25%', display: 'inline-block'}}>Level</span>
-        <Select
-              allowClear
-              style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
-              onChange={this.getValueLevel}
-            >
-              {this.state.level.length > 0
-                ? this.state.level.map((dataInformation: LEVEL) => (
-                  <Select.Option
-                    value={dataInformation.levelId}
-                    key={dataInformation.nameLevel}
-                  >
-                    {dataInformation.nameLevel}
-                  </Select.Option>
-                ))
-                : null}
-            </Select>
-      </div>
-
-      <div style={{marginTop: '5%'}}>
-      <span style={{width: '25%', display: 'inline-block'}}>Field</span>
-        <Select
-               allowClear
-              style={{borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block'}}
-              onChange={this.getValueFiled}
-            >
-              {this.state.filed.length > 0
-                ? this.state.filed.map((dataInformation: FIELD) => (
-                  <Select.Option
-                    value={dataInformation.fieldId}
-                    key={dataInformation.fieldName}
-                  >
-                    {dataInformation.fieldName}
-                  </Select.Option>
-                ))
-                : null}
-            </Select>
-      </div>
-      <div style={{padding: '5% 0 5% 69% '}}>
-        <Button onClick={this.getTopic}>Search</Button>
-      </div>
-    </div>} title="Search" trigger="click">
-              <Button>Search</Button>
-            </Popover>
-          </div>
         </div>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table 

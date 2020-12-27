@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Input, Modal, Popover, Row, Space, Steps, Table } from 'antd';
+import { Breadcrumb, Button, Card, Col, Form, Input, message, Modal, Popover, Row, Space, Steps, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -10,14 +10,17 @@ import FacultyManagementDetail from './faculty-management-detail/faculty-managem
 
 interface MyState {
   data: FACULTY_MANAGEMENT[];
+  visible: boolean;
 }
 interface IProps {
 }
 export default class FacultyManagement extends React.Component<IProps, MyState> {
+  divRef:any = React.createRef<HTMLDivElement>();
   constructor(props: MyState) {
     super(props)
     this.state = {
       data: [],
+      visible: false
     };
   }
 
@@ -27,6 +30,23 @@ export default class FacultyManagement extends React.Component<IProps, MyState> 
 
   filter = {
     search: '',
+  }
+
+  createFaculty = (value: any) => {
+    axios({
+      method: 'post',
+      url: `${environment.url}/faculty`,
+      data: value, 
+      headers: {
+          Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
+        }
+      })
+      .then(res => {
+          if (res.status === 200) {
+              message.success({content: 'Success'})
+          }
+      }) 
+      .catch(error => message.error({content: error.response.data.message}) )
   }
 
   getFaculty = () => {
@@ -47,6 +67,22 @@ export default class FacultyManagement extends React.Component<IProps, MyState> 
   handleChange = (e: any) => {
     this.filter.search = e.target.value;
   }
+
+  showModal = () => {
+    this.setState({ visible: true })
+  };
+
+  handleCancel = () => {
+    this.divRef.current.resetFields();
+    this.setState({ visible: false })
+  };
+  
+  onFinish = (values: any) => {
+    this.createFaculty(values)
+    this.divRef.current.resetFields();
+    this.setState({ visible: false })
+    this.getFaculty();
+  };
   
   columns: any = [
     {
@@ -87,10 +123,69 @@ export default class FacultyManagement extends React.Component<IProps, MyState> 
   ];
 
   render() {
+
+    const validateMessages = {
+      required: '${label} is required!',
+    }
+
     return (
       <div>
-        <div style={{ margin: '40px' }}>
-          <div style={{ float: 'right', margin: '10px 40px 30px 0' }}>
+     <Breadcrumb style={{ margin: '16px 15px', fontSize: '20px' }}>
+          <div style={{display: 'inline-block', fontWeight: 600}}>All Faculty Present</div>
+          <div style={{ display: 'inline-block', float: 'right' }}>
+
+          <Button  onClick={this.showModal}>Add</Button>
+            <Modal 
+            footer={null}
+            title="Add Faculty"
+            width={500}
+             visible={this.state.visible}
+              onCancel={this.handleCancel}>
+        <Form 
+            validateMessages={validateMessages}
+            onFinish={this.onFinish}
+            ref={this.divRef} 
+            labelCol={{
+              span: 6,
+            }}
+            wrapperCol={{
+              span: 18,
+            }}
+            >
+        <Form.Item name={'nameFaculty'} 
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        label="Faculty">
+         <Input />
+        </Form.Item>
+            <Form.Item
+            name={'nameUniversity'}
+            label="University"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item style={{ paddingLeft: '83%'}}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+
+
+
+        </Form>
+            </Modal>
+            
+
+
           <Popover content={<div>
               <div>
                 <span style={{ display: 'inline-block', width: '25%' }}>Keyword </span>
@@ -103,7 +198,7 @@ export default class FacultyManagement extends React.Component<IProps, MyState> 
               <Button>Search</Button>
             </Popover>
           </div>
-        </div>
+        </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table
             columns={this.columns}

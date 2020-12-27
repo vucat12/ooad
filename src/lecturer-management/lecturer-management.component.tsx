@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Form, Input, InputNumber, Modal, Popover, Row, Select, Space, Steps, Table } from 'antd';
+import { Breadcrumb, Button, Card, Col, Form, Input, InputNumber, message, Modal, Popover, Row, Select, Space, Steps, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -81,8 +81,8 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
     console.log("===", values);
     this.createLecturer(values);
     this.divRef.current.resetFields();
-    this.getLecturer();
     this.setState({ visible: false })
+    this.getLecturer();
   };
 
   
@@ -121,7 +121,7 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
   createLecturer = (value: any) => {
     axios({
       method: 'post',
-      url: `${environment.url}/faculty`,
+      url: `${environment.url}/user/register`,
       data: value, 
       headers: {
           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
@@ -129,10 +129,10 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
       })
       .then(res => {
           if (res.status === 200) {
-              alert("Ok")
+              message.success({content: 'Success'})
           }
       }) 
-      .catch(error => alert("Wrong") )
+      .catch(error => message.error({content: error.response.data.message}) )
   }
 
 
@@ -151,11 +151,6 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
       title: "Faculty Name",
       dataIndex: "faculty",
       key: "faculty"
-    },
-    {
-      title: "Day of birth",
-      dataIndex: "dob",
-      key: "dob"
     },
     {
       title: "Major",
@@ -187,8 +182,10 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
 
     return (
       <div>
-        <div style={{ margin: '40px' }}>
-          <div style={{ float: 'right', margin: '10px 40px 30px 0' }}>
+        
+        <Breadcrumb style={{ margin: '16px 15px', fontSize: '20px' }}>
+          <div style={{display: 'inline-block', fontWeight: 600}}>All Lecturer Present</div>
+          <div style={{ display: 'inline-block', float: 'right' }}>
             <Button  onClick={this.showModal}>Add</Button>
             <Modal 
             footer={null}
@@ -209,6 +206,17 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
             }}
             >
               <Row>
+        <Col span={12}>
+        <Form.Item name={'username'} 
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        label="Username">
+         <Input />
+        </Form.Item>
+      </Col>
                 <Col span={12}>    
             <Form.Item
             name={'fullName'}
@@ -221,21 +229,6 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
           >
             <Input />
           </Form.Item>
-          </Col>
-          <Col span={12}>
-              
-      <Form.Item
-        name={'email'}
-        label="Email"
-        rules={[
-          {
-            required: true,
-            type: 'email',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
           </Col>
               </Row>
   <Row>
@@ -250,6 +243,20 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
         <Input />
       </Form.Item>
     </Col>
+    <Col span={12}>
+        <Form.Item name={'major'} label="Major" 
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        >
+        <Input />
+        </Form.Item>
+      </Col>
+  </Row>
+     
+    <Row>
     <Col span={12}>
     <Form.Item name={'role'} 
     rules={[
@@ -266,45 +273,42 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
       </Select>
       </Form.Item>
     </Col>
-  </Row>
-     
-    <Row>
+   
       <Col span={12}>
-        <Form.Item name={'major'} label="Major" 
+      <Form.Item
+        name={'email'}
+        label="Email"
         rules={[
           {
             required: true,
+            type: 'email',
           },
         ]}
-        >
+      >
         <Input />
-        </Form.Item>
-      </Col>
-      <Col span={12}>
-        <Form.Item name={'phone'} 
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-        label="Phone">
-        <InputNumber  min={9} max={10} />
-        </Form.Item>
-      </Col>
+      </Form.Item>
+          </Col>
     </Row>
 
     <Row>
-      <Col span={12}>
-        <Form.Item name={'position'}
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-        label="Position">
-        <Input />
-        </Form.Item>
-      </Col>
+    <Col span={12}>
+  <Form.Item name='contractId' label="Contract" rules={[{ required: true }]}>
+<Select
+              allowClear
+            >
+              {this.state.contract.length > 0
+                ? this.state.contract.map((dataInformation: CONTRACT) => (
+                  <Select.Option
+                    value={dataInformation.contractId}
+                    key={dataInformation.nameContract}
+                  >
+                    {dataInformation.nameContract}
+                  </Select.Option>
+                ))
+                : null}
+            </Select>
+</Form.Item>
+  </Col>
       <Col span={12}>
         <Form.Item name={'degree'}
         rules={[
@@ -317,8 +321,6 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
         </Form.Item>
       </Col>
     </Row>
-
-
 <Row>
   <Col span={12}>
            <Form.Item name='facultyId' label="Faculty" rules={[{ required: true }]}>
@@ -338,25 +340,18 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
               </Select>
             </Form.Item>
   </Col>
-
   <Col span={12}>
-  <Form.Item name='contractId' label="Contract" rules={[{ required: true }]}>
-<Select
-              allowClear
-            >
-              {this.state.contract.length > 0
-                ? this.state.contract.map((dataInformation: CONTRACT) => (
-                  <Select.Option
-                    value={dataInformation.contractId}
-                    key={dataInformation.nameContract}
-                  >
-                    {dataInformation.nameContract}
-                  </Select.Option>
-                ))
-                : null}
-            </Select>
-</Form.Item>
-  </Col>
+        <Form.Item name={'position'}
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        label="Position">
+        <Input />
+        </Form.Item>
+      </Col>
+
 </Row>
       <Form.Item style={{ paddingLeft: '90%'}}>
         <Button type="primary" htmlType="submit">
@@ -365,6 +360,7 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
       </Form.Item>
     </Form>
             </Modal>
+
             <Popover content={<div>
               <div>
                 <span style={{ display: 'inline-block', width: '25%' }}>Keyword </span>
@@ -376,8 +372,15 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
             </div>} title="Search" trigger="click">
               <Button>Search</Button>
             </Popover>
+
+
+            
           </div>
-        </div>
+        </Breadcrumb>
+
+
+
+        
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table
             columns={this.columns}

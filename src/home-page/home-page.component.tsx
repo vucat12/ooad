@@ -1,9 +1,12 @@
 
 import * as React from 'react';
 import {  Breadcrumb, Button, Col, Divider, Row } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 import {  AimOutlined, DeploymentUnitOutlined, TeamOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 import './home-page.component.css'
+import Topic from '../topic/topic.component';
+import MyFaculty from '../my-faculty/my-faculty.component';
+import MyCouncil from '../my-council/my-council.component';
 // import { Routes } from '../../routes';
 // import { Route } from 'react-router-dom';
 // import LogIn from '../../log-in/log-in.component';
@@ -20,73 +23,73 @@ export class HomeOverview extends React.Component<HomeContent> {
   render() {
     return (
      <div>
-        <Breadcrumb style={{ margin: '16px 0', fontSize: '20px' }}>
-          <Breadcrumb.Item>Software management of Science</Breadcrumb.Item>
+        <Breadcrumb style={{ margin: '16px 22px', fontSize: '20px' }}>
+          <div style={{display: 'inline-block', fontWeight: 600}}>Dashboard</div>
         </Breadcrumb>
-        <div className="site-layout-background" style={{ minHeight: 360, margin: '0 2%' }}>
-             <Divider orientation="left" plain style={{paddingTop: '10px'}}> <span style={{fontSize: '20px'}}>Tong quan phan mem</span>  </Divider>
-             <div style={{height: '100%'}}>
+        <div className="site-layout-background" style={{ minHeight: 360, margin: '2%' }}>
+             <Divider orientation="left" plain style={{padding: '20px 0'}}> <span style={{fontSize: '20px'}}>Overview</span>  </Divider>
+             <div style={{height: '100%', padding: '32px 0'}}>
                <Row>
                  <Col span={8} className="col-devided">
                     <AimOutlined style={{fontSize: '100px'}} />
                     <div className="title-col">
-                      1. Tong so de tai
+                      1. TOPIC
                     </div>
                     <div style={{marginBottom: '30px'}}>
-                      Xem de tai chi tiet hien dang co
+                      View list topic
                     </div>
-                    <Button>Default</Button>
+                    <Button>
+                      <Link to="/topic">  View</Link>
+                    
+                      </Button>
                  </Col>
                  <Col span={8} className="col-devided">
                     <DeploymentUnitOutlined style={{fontSize: '100px'}} />
                         <div className="title-col">
-                        2. Tong so giang vien
+                        2. FACULTY
                         </div>
                         <div style={{marginBottom: '30px'}}>
-                          Danh sach giang vien hien tai
+                          View faculty
                         </div>
-                        <Button>Default</Button>
+                        <Button>
+                          <Link to="/my-faculty">
+                          View
+
+                          </Link>
+                          
+                          </Button>
                  </Col>
                  <Col span={8} className="col-devided">
                     <TeamOutlined style={{fontSize: '100px'}} />
                         <div className="title-col">
-                          3. Tong so linh vuc
+                          3. COUNCIL
                         </div>
                         <div style={{marginBottom: '30px'}}>
-                         Tong so linh vuc hien dang co
+                         View council
                         </div>
-                        <Button>Default</Button>
+                        <Button>
+                          <Link to="/my-council">
+                            View
+
+                          </Link></Button>
                  </Col>
                </Row>
+             
+                <Row>
+                  <Col span={24}>
+                    <div style={{textAlign: 'center', color: '#00000073', paddingTop: '100px'}}>
+                      Course Project: Object Oriented Analysis and Design <br/>
+                      Created by: Team 3
+                    </div>
+                    </Col>
+                </Row>
              </div>
-        </div>
-    
-        <div className="site-layout-background" 
-        style={{minHeight: 360,
-                margin: '2%',
-                }}>
-        <Row>
-          <Col span={16}> 
-           <Divider orientation="left" plain> <span style={{fontSize: '20px'}}>Tong quan phan mem</span>
-           </Divider>
-           <ul style={{paddingLeft: '11%'}}>
-             <li>1 coascashsakdjhaskdjhsakdashdkjashd</li>
-             <li>1 coascashsakdjhaskdjhsakdashdkjashd</li>
-             <li>1 coascashsakdjhaskdjhsakdashdkjashd</li>
-             <li>1 coascashsakdjhaskdjhsakdashdkjashd</li>
-           </ul>
-          </Col>
-          <Col span={8} style={{borderLeft: '1px solid #F0F2F5'}}> 
-           <Divider orientation="left" plain style={{marginLeft: '5px'}}> <span style={{fontSize: '20px'}}>Tong quan phan mem</span> 
-            </Divider>
-            <ul>
-             <li>1 coascashsakdjhaskdjhsakdashdkjashd</li>
-             <li>1 coascashsakdjhaskdjhsakdashdkjashd</li>
-             <li>1 coascashsakdjhaskdjhsakdashdkjashd</li>
-             <li>1 coascashsakdjhaskdjhsakdashdkjashd</li>
-           </ul>
-            </Col>
-        </Row>
+
+             <Switch>
+              <Route path="/topic" component={Topic}></Route>    
+              <Route path="/my-faculty" component={MyFaculty}/> 
+              <Route path="/my-council" component={MyCouncil}></Route>
+          </Switch>
         </div>
      </div>
     )

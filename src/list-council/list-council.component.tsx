@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Input, Modal, Popover, Row, Space, Steps, Table } from 'antd';
+import { Breadcrumb, Button, Card, Col, Input, Modal, Popover, Row, Space, Steps, Table } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -74,21 +74,9 @@ export default class ListCouncil extends React.Component<IProps, MyState> {
   render() {
     return (
       <div>
-        <div style={{ margin: '40px' }}>
-          <div style={{ float: 'right', margin: '10px 40px 30px 0' }}>
-            <Popover content={<div>
-              <div>
-                <span style={{ display: 'inline-block', width: '25%' }}>Keyword </span>
-                <Input style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }}/>
-              </div>
-              <div style={{ padding: '5% 0 5% 69% ' }}>
-                <Button >Search</Button>
-              </div>
-            </div>} title="Search" trigger="click">
-              <Button>Search</Button>
-            </Popover>
-          </div>
-        </div>
+       <Breadcrumb style={{ margin: '16px 15px', fontSize: '20px' }}>
+          <div style={{display: 'inline-block', fontWeight: 600}}>List Council Of Faculty</div>
+        </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table
             columns={this.columns}

@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Row,Table } from 'antd';
+import { Button, Card, Col, Row,Table, Tag } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import axios from 'axios';
 import * as React from 'react';
@@ -113,11 +113,6 @@ export class ListTopicDetail extends React.Component<IProps, MyState> {
       key: "leader"
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status"
-    },
-    {
       title: "Date Approved",
       dataIndex: "dateApproved",
       key: "dateApproved"
@@ -133,9 +128,51 @@ export class ListTopicDetail extends React.Component<IProps, MyState> {
       dataIndex: "dateExtend"
     },
     {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status: any) => (
+        <span>
+        {status == 'finish' &&    <Tag color={'green'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }   
+
+        {status == 'process' &&    <Tag color={'blue'} key={status}>
+                  {status.topUpperCase()}
+                </Tag>
+        }   
+
+{status == 'wait' &&    <Tag color={'green'} key={status}>
+                  {status.topUpperCase()}
+                </Tag>
+        }   
+        {status == 'error' &&    <Tag color={'volcano'} key={status}>
+                  {status.topUpperCase()}
+                </Tag>
+        }   
+
+        </span>
+      ),
+    },
+    {
       title: "Finish",
       key: "finish",
-      dataIndex: "finish"
+      dataIndex: "finish",
+      render: (finish: any) => (
+        <span>
+        {finish == 'COMPLETED' &&  <Tag color={'green'} key={finish}>
+                  {finish}
+                </Tag>
+        }   
+
+        {finish == 'NOT COMPLETED' &&  <Tag color={'volcano'} key={finish}>
+                  {finish}
+                </Tag>
+        }   
+
+        </span>
+      ),
     },
   ];
   render() {
@@ -145,16 +182,15 @@ export class ListTopicDetail extends React.Component<IProps, MyState> {
         <Button onClick={this.showModalEdit}>Detail </Button>
         <Modal
           visible={this.state.display}
-          title="Add Topic"
+          title="Detail Topic"
           width="1000px"
           onCancel={() => this.setState({ display: false })}
           footer={null}>
       <div style={{overflow: 'hidden', margin: '0 15px' }}>
       <div style={{background: 'white',
-                   margin: '4% 1.5%',
-                   padding: '2%',
+                   padding: '0 2%',
                     }}>
-
+<div style={{ color: '#00000073', fontWeight: 'bold', fontSize: '15px', paddingBottom: '8px'}}>Infomation</div>
           <Card style={{ width: "100%" }}>
               <Row>
                 <Col span={3}>
@@ -207,7 +243,11 @@ export class ListTopicDetail extends React.Component<IProps, MyState> {
           </Card>
 
       </div>
+      <hr style={{
+    margin: '32px 0 5px 0',
+  }}/>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 360}}>
+      <div style={{ color: '#00000073', fontWeight: 'bold', fontSize: '15px', paddingBottom: '8px'}}>List Lecturer Register</div>
         <Table 
         columns={this.columns} 
         dataSource={this.state.data} 

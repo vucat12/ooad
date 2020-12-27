@@ -1,5 +1,5 @@
 
-import { Button, Card, Col, Input, Modal, Popover, Row, Space, Steps, Table } from 'antd';
+import { Breadcrumb, Button, Card, Col, Input, message, Modal, Popover, Row, Space, Steps, Table, Tag } from 'antd';
 import * as React from 'react';
 import { environment } from '../environment/environment';
 import axios from 'axios';
@@ -113,12 +113,12 @@ export default class AssignTopic extends React.Component<IProps, MyState> {
         })
         .then(res => {
           if (res.status === 200) {
-              window.alert("aaaaaaaaaa")
+              message.success({content: 'Success'})
               this.getTopic();
           }
        
         }) 
-        .catch(error => alert("Wrong") )
+        .catch(error => message.error({content: error.response.data.message}) )
     this.setState({ visible: false});
   }
 
@@ -132,12 +132,12 @@ export default class AssignTopic extends React.Component<IProps, MyState> {
         })
         .then(res => {
           if (res.status === 200) {
-              window.alert("aaaaaaaaaa")
+              message.success({content: 'Success'})
               this.getTopic();
           }
        
         }) 
-        .catch(error => alert("Wrong") )
+        .catch(error => message.error({content: error.response.data.message}) )
     this.setState({ visible: false});
   }
 
@@ -210,7 +210,30 @@ export default class AssignTopic extends React.Component<IProps, MyState> {
     {
       title: "Status",
       key: "status",
-      dataIndex: "status"
+      dataIndex: "status",
+      render: (status: any) => (
+        <span>
+        {status == 'Completed' &&    <Tag color={'green'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }   
+
+        {status == 'University Review' &&    <Tag color={'geekblue'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }  
+
+        {status == 'Faculty Review' &&    <Tag color={'geekblue'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }   
+
+          {status == 'Decline' &&    <Tag color={'volcano'} key={status}>
+                  {status.toUpperCase()}
+                </Tag>
+        }   
+        </span>
+      ),
     },
     {
       title: 'Action',
@@ -382,8 +405,9 @@ export default class AssignTopic extends React.Component<IProps, MyState> {
           </div>
         </Modal>
 
-        <div style={{ margin: '40px' }}>
-          <div style={{ float: 'right', margin: '10px 40px 30px 0' }}>
+        <Breadcrumb style={{ margin: '16px 15px', fontSize: '20px' }}>
+          <div style={{display: 'inline-block', fontWeight: 600}}>Topic Need To Assign</div>
+          <div style={{ display: 'inline-block', float: 'right' }}>
             <Popover content={<div>
               <div>
                 <span style={{ display: 'inline-block', width: '25%' }}>Keyword </span>
@@ -396,7 +420,9 @@ export default class AssignTopic extends React.Component<IProps, MyState> {
               <Button>Search</Button>
             </Popover>
           </div>
-        </div>
+        
+          </Breadcrumb>
+        
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360, margin: '0 15px' }}>
           <Table
             columns={this.columns}
