@@ -132,3 +132,10 @@ export type COUNCIL_REVIEW = {
     score: string,
 }
 
+export type FACULTY_MANAGEMENT = {
+    facultyId: number,
+    nameFaculty: string,
+    nameUniversity: string,
+    totalTopic: number,
+    totalLecturer: number,
+}

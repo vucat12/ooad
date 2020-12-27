@@ -50,7 +50,6 @@ export default class ListTopic extends React.Component<IProps, MyState> {
 
   componentDidMount() {
     this.getTopic();
-    this.getListFaculty()
     this.getListLevel();
     this.getListField();
   }
@@ -77,23 +76,6 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   clear: any;
   parent: any;
 
-  getListFaculty = () => {
-    axios.get(`${environment.url}/faculty/all`,
-      {
-        headers: {
-          Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
-        }
-      })
-      .then(res => {
-        const faculty: FACULTY[] = res.data;
-        this.setState({ ...this.state, faculty: faculty })
-        return this.facultyList;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
   getListField = () => {
     axios.get(`${environment.url}/field/all`,
       {
@@ -112,7 +94,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
   }
 
   getTopic = () => {
-    axios.get(`${environment.url}/topic`,
+    axios.get(`${environment.url}/faculty/topic`,
       {
         headers: {
           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
@@ -317,26 +299,7 @@ export default class ListTopic extends React.Component<IProps, MyState> {
                 <span style={{ display: 'inline-block', width: '25%' }}>Keyword </span>
                 <Input style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }} onChange={this.handleChange} />
               </div>
-              <div style={{ marginTop: '5%' }}>
-                <span style={{ width: '25%', display: 'inline-block' }}>Faculty</span>
-                <Select
-                  allowClear
-                  style={{ borderRadius: '7px', width: '70%', marginLeft: '5%', display: 'inline-block' }}
-                  onChange={this.getValueFaculty}
-                >
-                  {this.state.faculty.length > 0
-                    ? this.state.faculty.map((dataInformation: FACULTY) => (
-                      <Select.Option
-                        value={dataInformation.facultyId}
-                        key={dataInformation.nameFaculty}
-                      >
-                        {dataInformation.nameFaculty}
-                      </Select.Option>
-                    ))
-                    : null}
-                </Select>
-              </div>
-              <div style={{ marginTop: '5%' }}>
+           <div style={{ marginTop: '5%' }}>
                 <span style={{ width: '25%', display: 'inline-block' }}>Level</span>
                 <Select
                   allowClear

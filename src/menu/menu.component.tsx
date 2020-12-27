@@ -17,6 +17,10 @@ import ListLecturer from '../list-lecturer/list-lecturer.component';
 import TopicCouncil from '../council/council.component';
 import ListCouncil from '../list-council/list-council.component';
 import CouncilReview from '../council-review/council-review.component';
+import MyCouncil from '../my-council/my-council.component';
+import LecturerManagement from '../lecturer-management/lecturer-management.component';
+import FacultyManagement from '../faculty-management/faculty-management.component';
+import CouncilManagement from '../council-management/council-management.component';
 
 export interface SlideBars {
   isRole: any;
@@ -127,9 +131,16 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
             }
                 <Menu.Item icon={<BankOutlined />} key="7">
                 <Link to="/council-review">
-                 Council review
+                 Council Review
                 </Link>
               </Menu.Item>
+
+              <Menu.Item icon={<BankOutlined />} key="8">
+                <Link to="/my-council">
+                 My Council
+                </Link>
+              </Menu.Item>
+
             <Menu.Item key="9" icon={<ContactsOutlined />}>
               <Link to="/my-faculty">
               My Faculty
@@ -149,6 +160,24 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
             </Menu.Item>
             }
 
+            <SubMenu key="sub3" icon={<FireOutlined />} title="Management">
+              <Menu.Item key="12">
+                <Link to="/lecturer-management">
+                 Lecturer
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="13">
+                <Link to="/faculty-management">
+                 Faculty
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="14">
+                <Link to="/council-management">
+                 Council
+                </Link>
+              </Menu.Item>
+            </SubMenu>
+
           </Menu>
         </Sider>
         <Layout className="site-layout">
@@ -167,6 +196,12 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
              {this.state.isRole==='MANAGER' && <Route path="/topic-council" component={TopicCouncil}></Route>}
              {this.state.isRole==='MANAGER' && <Route path="/list-council" component={ListCouncil}></Route>}
              <Route path="/council-review" component={CouncilReview}></Route>
+             <Route path="/my-council" component={MyCouncil}></Route>
+             
+            <Route path="/lecturer-management" component={LecturerManagement}></Route>
+            {this.state.isRole==='ADMIN' && <Route path="/faculty-management" component={FacultyManagement}></Route>}
+            {this.state.isRole==='ADMIN' && <Route path="/council-management" component={CouncilManagement}></Route>}
+
           </Switch>
 
           </Content>

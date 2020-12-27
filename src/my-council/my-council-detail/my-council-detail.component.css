@@ -1,0 +1,9 @@
+.table-row-light {
+    background-color: #ffffff;
+}
+.table-row-dark {
+    background-color: #fbfbfb;
+}
+.style tr th{
+    background-color: rgba(201, 196, 196,0.35) !important;
+}

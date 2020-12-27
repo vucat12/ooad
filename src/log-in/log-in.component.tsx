@@ -85,7 +85,6 @@ export class LogIn extends React.Component<LogIns> {
           <Form
             {...layout}
             name="basic"
-            initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             style={{paddingTop: '5%'}}
@@ -104,10 +103,6 @@ export class LogIn extends React.Component<LogIns> {
               rules={[{ required: true, message: 'Please input your password!' }]}
             >
               <Input.Password style={{width: '80%'}}/>
-            </Form.Item>
-
-            <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-              <Checkbox>Remember me</Checkbox>
             </Form.Item>
 
             <Form.Item {...tailLayout}>
