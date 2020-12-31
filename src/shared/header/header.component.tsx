@@ -39,9 +39,9 @@ export class HomePage extends React.Component<IProps, HomeContent> {
             </div>
         }
         </Col>
-        <Col span={11} >
+        <Col span={12} >
           <div  style={{float: 'right'}}>
-            <div style={{display: "inline-block", padding: ' 0px 15px'}}>
+            <div style={{display: "inline-block", padding: ' 0px 30px'}}>
               <div style={{display: 'inline-block', paddingRight: '15px'}}>
                 <UserAddOutlined  style={{paddingRight: '10px'}} /> 
                 <Popover content={

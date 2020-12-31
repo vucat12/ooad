@@ -55,10 +55,9 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
         },
         params: { ...this.filter }
       })
-      .then(res => {
-        const dataSource: LECTURES[] = res.data.contents;
-        this.setState({ ...this.state, data: dataSource })
-        console.log(this.state.data)
+      .then((res) => {
+        const dataSource: LECTURES[] =  res.data.contents;
+        this.setState({ ...this.state, data:[...dataSource]})
         return this.dataSource;
       })
       .catch(e => console.log(e))
@@ -77,24 +76,23 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
     this.setState({ visible: false })
   };
   
-  onFinish = (values: any) => {
-    console.log("===", values);
-    this.createLecturer(values);
-    this.divRef.current.resetFields();
-    this.setState({ visible: false })
-    this.getLecturer();
+  onFinish = async (values: any) => {
+    await this.createLecturer(values);
+    await this.divRef.current.resetFields();
+    await this.setState({ visible: false })
+    await this.getLecturer();
   };
 
   
-  getListFaculty = () => {
-    axios.get(`${environment.url}/faculty/all`,
+  getListFaculty = async() => {
+    await axios.get(`${environment.url}/faculty/all`,
       {
         headers: {
           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
         }
       })
-      .then(res => {
-        const faculty: FACULTY[] = res.data;
+      .then((res) => {
+        const faculty: FACULTY[] =  res.data;
         this.setState({ ...this.state, faculty: faculty })
       })
       .catch((error) => {
@@ -118,8 +116,8 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
       });
   }
 
-  createLecturer = (value: any) => {
-    axios({
+  createLecturer = async(value: any) => {
+    await axios({
       method: 'post',
       url: `${environment.url}/user/register`,
       data: value, 
@@ -127,9 +125,9 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
         }
       })
-      .then(res => {
+      .then((res) => {
           if (res.status === 200) {
-              message.success({content: 'Success'})
+            message.success({content: 'Success'})
           }
       }) 
       .catch(error => message.error({content: error.response.data.message}) )
@@ -142,6 +140,11 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
         dataIndex: "lecturerId",
         key: "lecturerId"
       },
+    {
+      title: "Username",
+      key: "username",
+      dataIndex: "username"
+    },
     {
       title: "Full Name",
       dataIndex: "fullName",
@@ -161,6 +164,16 @@ export default class LecturerManagement extends React.Component<IProps, MyState>
       title: "Contract",
       key: "contract",
       dataIndex: "contract"
+    },
+    {
+      title: "Position",
+      key: "position",
+      dataIndex: "position"
+    },
+    {
+      title: "Role",
+      key: "role",
+      dataIndex: "role"
     },
     {
       title: 'Action',

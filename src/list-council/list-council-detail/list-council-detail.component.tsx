@@ -135,7 +135,7 @@ export class ListCouncilDetail extends React.Component<IProps, MyState> {
       key: "result",
       render: (result: any) => (
         <span>
-        {result == 'NOT YET RATE' &&    <Tag color={'geekblue'} key={result}>
+        {result == 'NOT RATE' &&    <Tag color={'geekblue'} key={result}>
                   {result}
                 </Tag>
         }   

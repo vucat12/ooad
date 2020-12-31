@@ -150,8 +150,7 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
       <div className="site-layout-background" style={{ padding: 16, minHeight: 360}}>
         <Row>
           <Col span={12}>
-          <Card  title="Default size card" style={{ width: 500, backgroundColor: '#fdfaf7' }}  type="inner">
-            <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Full Name:</div>  {this.topic.fullName}</div></p>
+          <Card  title="Topic Detail" style={{ width: 500, backgroundColor: '#fdfaf7' }}  type="inner">
             <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Update at:</div >  {this.topic.updatedAt}</div></p>
             <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}> Topic Id:</div> {this.topic.topicId}</div></p>
             <p><div> <div style={{width: '150px', display: 'inline-block', fontWeight:'bold'}}>Name Topic:</div>  {this.topic.nameTopic}</div></p>
@@ -194,7 +193,7 @@ export class CouncilReviewDetail extends React.Component<IProps, MyState> {
           },
         ]}
       >
-        <Input type="number" min="1" max="100" disabled={this.props.score != undefined ? true : false}/>
+        <Input type="number"  min="1" max={100} disabled={this.props.score != undefined ? true : false}/>
       </Form.Item>
         <Form.Item
           label="Comment"

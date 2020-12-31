@@ -23,10 +23,10 @@ export class HomeOverview extends React.Component<HomeContent> {
   render() {
     return (
      <div>
-        <Breadcrumb style={{ margin: '16px 22px', fontSize: '20px' }}>
+        <Breadcrumb style={{ margin: '16px 22px 16px 22px', fontSize: '20px' }}>
           <div style={{display: 'inline-block', fontWeight: 600}}>Dashboard</div>
         </Breadcrumb>
-        <div className="site-layout-background" style={{ minHeight: 360, margin: '2%' }}>
+        <div className="site-layout-background" style={{ minHeight: 350, margin: '2%' }}>
              <Divider orientation="left" plain style={{padding: '20px 0'}}> <span style={{fontSize: '20px'}}>Overview</span>  </Divider>
              <div style={{height: '100%', padding: '32px 0'}}>
                <Row>
@@ -35,8 +35,8 @@ export class HomeOverview extends React.Component<HomeContent> {
                     <div className="title-col">
                       1. TOPIC
                     </div>
-                    <div style={{marginBottom: '30px'}}>
-                      View list topic
+                    <div style={{margin: '0 auto', marginBottom: '30px', fontWeight:500, width: 200,height: 80}}>
+                        See list of topics from a variety of fields, such as: Sciences, Music, Medicine, Economics, Sport, ...
                     </div>
                     <Button>
                       <Link to="/topic">  View</Link>
@@ -48,8 +48,8 @@ export class HomeOverview extends React.Component<HomeContent> {
                         <div className="title-col">
                         2. FACULTY
                         </div>
-                        <div style={{marginBottom: '30px'}}>
-                          View faculty
+                        <div style={{margin: '0 auto', marginBottom: '30px', fontWeight:500, width: 200,height: 80}}>
+                        See information about your department, including information and its members
                         </div>
                         <Button>
                           <Link to="/my-faculty">
@@ -64,8 +64,8 @@ export class HomeOverview extends React.Component<HomeContent> {
                         <div className="title-col">
                           3. COUNCIL
                         </div>
-                        <div style={{marginBottom: '30px'}}>
-                         View council
+                        <div style={{margin: '0 auto', marginBottom: '30px', fontWeight:500, width: 200,height: 80}}>
+                        See the details of the participating judges and the results of each topic
                         </div>
                         <Button>
                           <Link to="/my-council">
@@ -77,7 +77,7 @@ export class HomeOverview extends React.Component<HomeContent> {
              
                 <Row>
                   <Col span={24}>
-                    <div style={{textAlign: 'center', color: '#00000073', paddingTop: '100px'}}>
+                    <div style={{textAlign: 'center', color: '#00000073', paddingTop: '40px'}}>
                       Course Project: Object Oriented Analysis and Design <br/>
                       Created by: Team 3
                     </div>

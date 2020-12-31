@@ -80,7 +80,6 @@ export class ListTopicDetail extends React.Component<IProps, MyState> {
         const dataSource: DETAIL_FACULTY[] = res.data.teamList;
         dataSource.map(x => { x.key = x.teamId })
         this.setState({ ...this.state, data: dataSource })
-        console.log(this.state.data)
         return this.dataSource;
       })
       .catch(e => console.log(e))
@@ -139,16 +138,16 @@ export class ListTopicDetail extends React.Component<IProps, MyState> {
         }   
 
         {status == 'process' &&    <Tag color={'blue'} key={status}>
-                  {status.topUpperCase()}
+                  {status.toUpperCase()}
                 </Tag>
         }   
 
 {status == 'wait' &&    <Tag color={'green'} key={status}>
-                  {status.topUpperCase()}
+                  {status.toUpperCase()}
                 </Tag>
         }   
         {status == 'error' &&    <Tag color={'volcano'} key={status}>
-                  {status.topUpperCase()}
+                  {status.toUpperCase()}
                 </Tag>
         }   
 
@@ -193,52 +192,55 @@ export class ListTopicDetail extends React.Component<IProps, MyState> {
 <div style={{ color: '#00000073', fontWeight: 'bold', fontSize: '15px', paddingBottom: '8px'}}>Infomation</div>
           <Card style={{ width: "100%" }}>
               <Row>
-                <Col span={3}>
-                    <span> <strong>Name Topic</strong>  </span>
+              <Col span={3}> <span> <strong> Topic ID </strong></span>
                 </Col>
                 <Col span={9}>
-                  {this.topic.nameTopic}
+                  {this.topic.topicId}
                 </Col>
-                <Col span={3}> 
-                <span> <strong>Updated At</strong>  </span>
+                <Col span={3}> <span> <strong>Level</strong>  </span>
                 </Col>
-                <Col span={9}> 
-                {this.topic.updatedAt}
-                </Col>
+                <Col span={9}>
+                 {this.topic.nameLevel}</Col>
+               
               </Row>
               <Row>
-                <Col span={3}> <span> <strong> Topic Id </strong></span>
+              <Col span={3}>
+                    <span> <strong>Title</strong>  </span>
                 </Col>
                 <Col span={9}>
-                 {this.topic.topicId}
+                 {this.topic.nameTopic}
                  </Col>
-                <Col span={3}> <span> <strong> Updated By</strong> </span>
+                 <Col span={3}> <span> <strong>Field</strong>  </span>
                 </Col>
                 <Col span={9}>
-                 {this.topic.updatedBy}
-                </Col>
+                 {this.topic.fieldName}</Col>
+               
               </Row>
               <Row>
-                <Col span={3}>
-                   <span> <strong>Name Faculty </strong> </span>
+              <Col span={3}> <span> <strong> Description </strong></span>
+                </Col>
+                <Col span={9}>
+                 {this.topic.description}</Col>
+                
+              </Row>
+              <Row>
+              <Col span={3}>
+                   <span> <strong>Faculty</strong> </span>
                 </Col>
                 <Col span={9}>
                     {this.topic.nameFaculty}
                 </Col>
-                <Col span={3}> <span> <strong>Name Level</strong>  </span>
+                <Col span={3}> 
+                <span> <strong>Updated At</strong>  </span>
                 </Col>
-                <Col span={9}>
-                 {this.topic.nameLevel}</Col>
-              </Row>
-              <Row>
-                <Col span={3}> <span> <strong>Field Name</strong>  </span>
+                <Col span={3}> 
+                {this.topic.updatedAt}
                 </Col>
-                <Col span={9}>
-                 {this.topic.fieldName}</Col>
-                <Col span={3}> <span> <strong> Description </strong></span>
+                <Col span={1}> <span> <strong>By</strong> </span>
                 </Col>
-                <Col span={9}>
-                 {this.topic.description}</Col>
+                <Col span={5}>
+                 {this.topic.updatedBy}
+                </Col>
               </Row>
           </Card>
 

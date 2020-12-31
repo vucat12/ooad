@@ -39,7 +39,9 @@ export type LECTURES = {
     contract: string,
     faculty: string,
     position: string,
-    degree: string
+    degree: string,
+    username: string,
+    role: string
 }
 
 export type CONTRACT = {

@@ -25,9 +25,6 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
       filed: [],
       display: false
     };
-    // this.getTopicId(this.props.id)
-    console.log("====id=======", this.props.id)
-    console.log("======topicDetail======", this.props.topicDetail)
   }
   facultyList: any;
   shouldComponentUpdate(nextProps: IProps, nextState: MyState) {
@@ -155,7 +152,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
   };
 
   showModalEdit = () => {
-    this.getListFaculty();
+    //this.getListFaculty();
     this.getListLevel();
     this.getListField();
     this.setState({ display: true });
@@ -188,7 +185,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
             validateMessages={validateMessages}
             initialValues={{
               nameTopic: this.props.topicDetail.nameTopic,
-              facultyId: this.props.topicDetail.facultyId,
+              //facultyId: this.props.topicDetail.facultyId,
               levelId: this.props.topicDetail.levelId,
               fieldId: this.props.topicDetail.fieldId,
               description: this.props.topicDetail.description,
@@ -197,7 +194,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
             <Form.Item name='nameTopic' label="Title" rules={[{ required: true }]}>
               <Input style={{ float: 'right', width: '370px' }} />
             </Form.Item>
-            <Form.Item name='facultyId' label="Faculty" rules={[{ required: true }]}>
+            {/* <Form.Item name='facultyId' label="Faculty" rules={[{ required: true }]}>
               <Select
                 style={{ float: 'right', width: '370px' }}
                 allowClear
@@ -214,7 +211,7 @@ export class ListTopicEdit extends React.Component<IProps, MyState> {
                   ))
                   : null}
               </Select>
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item name='levelId' label="Level" rules={[{ required: true }]}>
               <Select
                 allowClear

@@ -68,8 +68,8 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
     });
   }
 
-  createUser = (topicId: any, data: any) => {
-    axios({
+  createUser =  async (topicId: any, data: any) => {
+    await axios({
       method: 'post',
       url: `${environment.url}/council/create-council/${topicId}`,
       data: data, 
@@ -95,8 +95,7 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
     this.divRef.current.resetFields();
   }
 
-  onFinish = (values: any) => {
-    console.log("====", values)
+  onFinish = async(values: any) => {
     const fullMember = [{
       "username": values.username,
       "positionId": 1,
@@ -113,9 +112,9 @@ export default class TopicCouncil extends React.Component<IProps, MyState> {
       "username": values.username4,
       "positionId": 5,
     }]
-    this.createUser(this.state.topicId, fullMember);
-    this.getTopic();
-    this.setState({ visible: false })
+    await this.createUser(this.state.topicId, fullMember);
+    await this.getTopic();
+    await this.setState({ visible: false })
     
   }
 

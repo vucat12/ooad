@@ -5,7 +5,7 @@ import { environment } from '../environment/environment';
 import axios from 'axios';
 import { FACULTY, LEVEL, FIELD, CONTRACT, MYTOPIC, LECTURER_DETAIL } from "../types/components/Topic/index";
 import './assign-topic.component.css'
-import { LikeOutlined, LoadingOutlined, SmileOutlined, SolutionOutlined, StarOutlined, UserOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined, LikeOutlined, LoadingOutlined, SmileOutlined, SolutionOutlined, StarOutlined, SyncOutlined, UserOutlined } from '@ant-design/icons';
 
 interface MyState {
   data: MYTOPIC[];
@@ -213,22 +213,22 @@ export default class AssignTopic extends React.Component<IProps, MyState> {
       dataIndex: "status",
       render: (status: any) => (
         <span>
-        {status == 'Completed' &&    <Tag color={'green'} key={status}>
+        {status == 'Completed' &&    <Tag icon={<CheckCircleOutlined />} color={'success'} key={status}>
                   {status.toUpperCase()}
                 </Tag>
         }   
 
-        {status == 'University Review' &&    <Tag color={'geekblue'} key={status}>
+        {status == 'University Review' &&    <Tag icon={<SyncOutlined spin />} color={'processing'} key={status}>
                   {status.toUpperCase()}
                 </Tag>
         }  
 
-        {status == 'Faculty Review' &&    <Tag color={'geekblue'} key={status}>
+        {status == 'Faculty Review' &&    <Tag icon={<SyncOutlined spin />} color={'processing'} key={status}>
                   {status.toUpperCase()}
                 </Tag>
         }   
 
-          {status == 'Decline' &&    <Tag color={'volcano'} key={status}>
+          {status == 'Decline' &&    <Tag icon={<CloseCircleOutlined />} color={'red'} key={status}>
                   {status.toUpperCase()}
                 </Tag>
         }   

@@ -227,8 +227,8 @@ export default class ListTopic extends React.Component<IProps, MyState> {
     {
       title: "Name",
       dataIndex: "nameTopic",
-      key: "nameTopic",
-      width: '15%',
+      key: "nameTopic"
+     // width: '15%',
     },
     {
       title: "Faculty",

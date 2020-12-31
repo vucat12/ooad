@@ -32,8 +32,8 @@ export default class FacultyManagement extends React.Component<IProps, MyState> 
     search: '',
   }
 
-  createFaculty = (value: any) => {
-    axios({
+  createFaculty = async (value: any) => {
+    await axios({
       method: 'post',
       url: `${environment.url}/faculty`,
       data: value, 
@@ -49,8 +49,8 @@ export default class FacultyManagement extends React.Component<IProps, MyState> 
       .catch(error => message.error({content: error.response.data.message}) )
   }
 
-  getFaculty = () => {
-    axios.get(`${environment.url}/faculty`,
+  getFaculty =async () => {
+    await axios.get(`${environment.url}/faculty`,
       {
         headers: {
           Authorization: `Bearer ${(localStorage.getItem('KeyToken'))}`
@@ -59,7 +59,7 @@ export default class FacultyManagement extends React.Component<IProps, MyState> 
       })
       .then(res => {
         const dataSource: FACULTY_MANAGEMENT[] = res.data.contents;
-        this.setState({ ...this.state, data: dataSource })
+        this.setState({ ...this.state, data: [...dataSource] })
       })
       .catch(e => console.log(e))
   }
@@ -77,11 +77,11 @@ export default class FacultyManagement extends React.Component<IProps, MyState> 
     this.setState({ visible: false })
   };
   
-  onFinish = (values: any) => {
-    this.createFaculty(values)
-    this.divRef.current.resetFields();
-    this.setState({ visible: false })
-    this.getFaculty();
+  onFinish = async (values: any) => {
+    await this.createFaculty(values)
+    await this.divRef.current.resetFields();
+    await this.setState({ visible: false })
+    await this.getFaculty();
   };
   
   columns: any = [

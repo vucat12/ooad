@@ -5,7 +5,7 @@ import { Layout, Menu } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import HeaderInit from '../shared/header/header.component';
 import Topic from '../topic/topic.component';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import HomeOverview from '../home-page/home-page.component';
 import ListTopic from '../list-topic/list-topic.component';
 import axios from 'axios';
@@ -83,9 +83,17 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
       }
   }
 
-
   render() {
     const { collapsed } = this.state;
+    const a:any = this.props;
+    const path = a.match.url;
+    
+    const token = localStorage.getItem('KeyToken');
+    if(!token)
+    {
+      return <Redirect push to="/"/>
+    }
+    
   return (
     <Layout style={{ minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
@@ -95,13 +103,13 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
           padding: '10px 0',
           letterSpacing: '2px',
           }}>OOAD</div>
-          <Menu theme="dark" mode="inline" onClick={(item) => this.getItems(item)} >
-            <Menu.Item key="1" icon={<PieChartOutlined/>} >
+          <Menu selectedKeys={[`${path}`]} theme="dark" mode="inline" onClick={(item) => this.getItems(item)} >
+            <Menu.Item key="/home-overview" icon={<PieChartOutlined/>} >
               <Link to="/home-overview">
                 Home
               </Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<DesktopOutlined />}>
+            <Menu.Item key="/topic" icon={<DesktopOutlined />}>
               <Link to="/topic">
                 All Topic
               </Link>
@@ -109,12 +117,12 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
 
             {this.state.isRole==='MANAGER' &&
             <SubMenu key="sub1" icon={<UserOutlined />} title="Faculty">
-              <Menu.Item key="3">
+              <Menu.Item key="/list-topic">
                 <Link to="/list-topic">
                   List Topic
                 </Link>
               </Menu.Item>
-              <Menu.Item key="4">
+              <Menu.Item key="/list-lecturer">
                 <Link to="/list-lecturer">
                  List Lecturer
                 </Link>
@@ -123,26 +131,26 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
             }
             <SubMenu key="sub2" icon={<FireOutlined />} title="Council">
               {this.state.isRole == 'MANAGER' &&
-              <Menu.Item key="5">
+              <Menu.Item key="/topic-council">
                 <Link to="/topic-council">
                  Topic Council 
                 </Link>
               </Menu.Item>
               }
               {this.state.isRole == 'MANAGER' &&
-                <Menu.Item key="6">
+                <Menu.Item key="/list-council">
                   <Link to="/list-council">
                   List Council 
                   </Link>
                 </Menu.Item>
               }
-              <Menu.Item key="7">
+              <Menu.Item key="/council-review">
                 <Link to="/council-review">
                  Council Review
                 </Link>
               </Menu.Item>
 
-              <Menu.Item key="8">
+              <Menu.Item key="/my-council">
                 <Link to="/my-council">
                  My Council
                 </Link>
@@ -150,19 +158,19 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
             </SubMenu>
 
 
-            <Menu.Item key="9" icon={<ContactsOutlined />}>
+            <Menu.Item key="/my-faculty" icon={<ContactsOutlined />}>
               <Link to="/my-faculty">
               My Faculty
               </Link>
             </Menu.Item>
-            <Menu.Item key="10" icon={<FileOutlined />}>
+            <Menu.Item key="/my-topic" icon={<FileOutlined />}>
               <Link to="/my-topic">
                My Topic
               </Link>
             </Menu.Item>
 
             { (this.state.isRole === 'MANAGER' || this.state.isRole === 'ADMIN') &&
-            <Menu.Item key="11" icon={<FileOutlined />}>
+            <Menu.Item key="/assign-topic" icon={<FileOutlined />}>
               <Link to="/assign-topic">
                Assign Topic
               </Link>
@@ -172,17 +180,17 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
 
             {this.state.isRole === 'ADMIN' &&
             <SubMenu key="sub3" icon={<FireOutlined />} title="Management">
-              <Menu.Item key="12">
+              <Menu.Item key="/lecturer-management">
                 <Link to="/lecturer-management">
                  Lecturer
                 </Link>
               </Menu.Item>
-              <Menu.Item key="13">
+              <Menu.Item key="/faculty-management">
                 <Link to="/faculty-management">
                  Faculty
                 </Link>
               </Menu.Item>
-              <Menu.Item key="14">
+              <Menu.Item key="/council-management">
                 <Link to="/council-management">
                  Council
                 </Link>
@@ -195,7 +203,8 @@ export class SlideBar extends React.Component<IProps, SlideBars> {
           <Header className="site-layout-background" style={{ padding: 0 }} >
             <HeaderInit userName={this.state.userName} facultyName={this.state.facultyName} isRole={this.state.isRole}/>
           </Header>
-          <Content style={{ margin: '0 16px' }}>
+          <Content style={{ margin: '0 16px',overflowY: "scroll",
+    height: "80vh" }}>
           <Switch>
              <Route path="/home-overview" component={HomeOverview}></Route>
              <Route path="/topic" component={Topic}></Route>     

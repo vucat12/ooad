@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
+import Snow from './Components/Snow';
 import LogIn from './log-in/log-in.component';
 import SlideBar from './menu/menu.component';
 
@@ -8,6 +9,7 @@ function App() {
     <div>
       <BrowserRouter>
         <div>
+          <Snow>
           <Route path="/" exact component={LogIn} />
           {/* <Route path="/topic" exact component={SlideBar} />
           <Route path="/home-overview" exact component={SlideBar}/>
@@ -19,7 +21,7 @@ function App() {
           <Route path="/topic-council" exact component={SlideBar}/> */}
           
           <Route path="/(topic|home-overview|list-topic|my-faculty|my-topic|assign-topic|list-lecturer|topic-council|list-council|council-review|my-council|lecturer-management|faculty-management|council-management)" component={SlideBar} />
-
+          </Snow>
         </div> 
       </BrowserRouter>
     </div>
